@@ -1,128 +1,15 @@
 # Change Log
 
-All notable changes to the "vscode-psl" extension will be documented in this
-file.
-
-## v1.13.2
-
-* Further enhancements in Language highlight.
-
-## v1.13.1
-
-* Fix bugs introduced in Language highlight enhancements.
-
-## v1.13.0
-
-* Language highlight enhancements.
-
-## v1.12.1
-
-* Fix of bug where `Buffer` was not decoded to a `string`.
-
-## v1.12.0
-
-* Update dependencies.
-* Implement support for the serialized data format.
-* Add snippet for `#PROPERTYDEF` directives.
-* Add default value for the date in the revision history snippet.
-
-## v1.11.4
-
-Dependency updates
-
-## v1.11.3
-
-* Code actions for batches and triggers
-
-## v1.11.2
-
-* Scope the setting `psl.trailingNewline` to resource
-
-## v1.11.0
-
-Allow sources to be split across multiple projects with a `profile-project.json`. Current functionality is *unstable* and is 
-subject to change (versioned `0.0.1`).
-
-```json
-{
-	"version": "0.0.1",
-	"parentProjects": [
-		"profile-application",
-		"profile-framework"
-	],
-	"pslSources": [
-		"dataqwik/procedure/",
-		"psl/"
-	],
-	"fileDefinitionSources": [
-		"dataqwik/table/"
-	]
-}
-```
-
-This file can be used to configure sources, not only for the current project, but across multiple projects in a vscode workspace.
-All fields are optional. In the example above, `pslSources` and `fileDefinitionSources` are populated with their default
-values. The names in the `parentProjects` array refer to the names of the vscode workspace themselves. For more about
-workspace visit the [official documentation](https://code.visualstudio.com/docs/editor/multi-root-workspaces) for more information.
-
-Other changes include:
-
-* Data Items from PARFID's can now be resolved by Completion/Hover/Go-To
-* Data Item Completion now uses lowercase
-
-## v1.10.1
-* Allow messages with length > 16^2 - 2 to be read from MTM
-
-## v1.10.0
-* Take language features out of preview
-* Enable GT.M debugging in the status bar
-* Added default snippet for pslmain() (thanks [@mischareitsma](https://github.com/mischareitsma))
-* Code coverage visualization
-* Update documentation
-
-## v1.9.0
-
-Adds two new custom menu items "Run Test" and "Run Test (with Coverage)". The custom logic must be implemented in your Profile instance. Then it can be called by adding this configuration to your `settings.json`:
-```json
-"psl.customTasks": [
-	{
-		"command": "runCoverage",
-		"mrpcID": "^ZMRPC121",
-		"request": "PSLRUNTESTC"
-	},
-	{
-		"command": "runTest",
-		"mrpcID": "^ZMRPC121",
-		"request": "PSLRUNTEST"
-	}
-]
-```
-
-The `command` names are fixed, but the `mrpcID` and `request` fields can match your implementation.
-
-Other changes include:
-* Adds rule for "PropertyIsDuplicate" from psl-lint (thanks [@Thirurakshan](https://github.com/Thirurakshan))
-* Properly scope preview configuration to resource
-* Change batch section icon
-* Fix code quality to only lint when config file is present
-
-## v1.8.1
-
-* Do not change focus to output channel after writing
-
-## v1.8.0
-
-* Adds fields `serverType` and `encoding` to environments.json (thanks [@joelgomes85](https://github.com/joelgomes85) for opening the issue)
-
-## v1.7.1
-
-* public declarations that start with v are now only diagnosed at INFO level
+All notable changes will be documented in this file.
 
 ## v1.7.0
 
 * Adds rule for "TblColDocumentation" from psl-lint (thanks [@ManikandanKKA](https://github.com/ManikandanKKA))
-* Add a setting to check trailing newline after a "Get" or "Refresh".
-* Adds a command to render markdown documentation of a PSL document when a server is present.
+* Adds rule for "PropertyIsDuplicate" from psl-lint (thanks [@Thirurakshan](https://github.com/Thirurakshan))
+* Fix code quality to only lint when config file is present
+* Project split from original source [ing-bank/vscode-psl](https://github.com/ing-bank/vscode-psl.git)
+  to new dedicated source [ing-bank/psl-parser](https://github.com/ing-bank/psl-parser.git).
+* Deprecated all previous released versions.
 
 ## v1.6.0
 
@@ -130,7 +17,7 @@ Other changes include:
 
 ## v1.5.1
 
-* Fixed a bug in codeQuality that caused major workbench performance degredation.
+* Fixed a bug in codeQuality that caused major workbench performance degradation.
 
 ## v1.5.0
 
@@ -205,11 +92,3 @@ Promote to 1.0.0 stable. Introduces language support.
 - Outlines for PSL entities
 - Record completion items
 - Fixes to environment configuration interface
-
-## v0.0.1
-Initial publication.
-
-- Get/Refresh, Send, Run, Test Compile, and Compile and Link.
-- Multi-environment configurations
-- Terminal support
-- PSL and table item syntax coloring

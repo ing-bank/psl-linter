@@ -20,7 +20,7 @@
     "SOliveira"
   ],
   "main": "./lib/cli.js",
-  "types": "./lib/types/cli.js",
+  "types": "./lib/types/cli.d.ts",
   "bin": "./lib/cli.js",
   "repository": {
     "type": "git",
@@ -45,6 +45,7 @@
     "@types/jest": "^29.2.0",
     "@types/node": "^18.11.4",
     "jest": "^29.2.1",
+    "typescript": "^4.8.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",
     "tslint": "^5.20.1"
