@@ -1,10 +1,9 @@
-*.jrnl
-*.log
-out
-node_modules
-*.vsix
-.project
-.settings
-src/hostif/target/*
-.classpath
-src/pslLint/cli/lib/*
+# Dependency directory
+node_modules/
+
+# Editors
+.idea/
+
+# Project build
+lib/
+*.tgz
