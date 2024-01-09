@@ -1,94 +1,112 @@
-# Change Log
+# Changelog
 
-All notable changes will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-## v1.7.0
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-* Adds rule for "TblColDocumentation" from psl-lint (thanks [@ManikandanKKA](https://github.com/ManikandanKKA))
-* Adds rule for "PropertyIsDuplicate" from psl-lint (thanks [@Thirurakshan](https://github.com/Thirurakshan))
-* Fix code quality to only lint when config file is present
-* Project split from original source [ing-bank/vscode-psl](https://github.com/ing-bank/vscode-psl.git)
-  to new dedicated source [ing-bank/psl-parser](https://github.com/ing-bank/psl-parser.git).
-* Deprecated all previous released versions.
+## [Unreleased]
 
-## v1.6.0
+### Added
 
-* Adds rule "PropertyIsDummy" from psl-lint (thanks [@kewtree1408](https://github.com/kewtree1408))
+- TblColDocumentation psl-lint rule (thanks
+  [@ManikandanKKA](https://github.com/ManikandanKKA)).
+- PropertyIsDuplicate psl-lint rule (thanks
+  [@Thirurakshan](https://github.com/Thirurakshan)).
 
-## v1.5.1
+### Changed
 
-* Fixed a bug in codeQuality that caused major workbench performance degradation.
+- Project split from original source [ing-bank/vscode-psl](https://github.com/ing-bank/vscode-psl.git)
+  to new dedicated source [ing-bank/psl-linter](https://github.com/ing-bank/psl-linter.git).
+  This deprecates all previous released versions. Previous revisions from the
+  original CHANGELOG are filtered for psl-linter related changes and kept in
+  here, and the diffs are investigated to fill in the gaps.
+- Update this changelog to follow the latest format from *Keep a Changelog*.
 
-## v1.5.0
+## [1.6.0] - 2019-05-06
 
-* TwoEmptyLines psl-lint rule (thanks [@RajkumarVelusamy](https://github.com/RajkumarVelusamy))
-* MultiLineDeclare psl-lint rule (thanks [@Thirurakshan](https://github.com/Thirurakshan))
-* Automated deployments (thanks [@morganing](https://github.com/morganing))
-* Improved error messages when attempting to test compile an invalid file (thanks [@cjprieb](https://github.com/cjprieb))
-* Updated snippets (thanks [@cjprieb](https://github.com/cjprieb))
-* Improved PSL statement parsing
+### Added
 
-## v1.4.1
+- PropertyIsDummy psl-lint rule (thanks
+  [@kewtree1408](https://github.com/kewtree1408)).
 
-* Fixed a bug that would break do statement completion
-* Fixed syntax highlighting to no longer highlight fields with keyword identifiers (thanks [@cjprieb](https://github.com/cjprieb))
-* Made the OPEN section header syntax highlighting less strict to allow multiple spaces after the OPEN  identifier (thanks [@cjprieb](https://github.com/cjprieb))
+## [1.5.1] - 2018-12-09
 
-## v1.4.0
+### Fixed
 
-Added new rule `RuntimeStart` that checks if variables declared outside of a TP Fence are referenced from within.
+- Fixed a bug in codeQuality that caused major workbench performance
+  degradation.
 
-## v1.2.0
+## [1.5.0] - 2018-12-04
 
-Linting in PSL now uses a configuration file. By default the setting `"psl.lint"` is now `"config"`. Other options are `"all"` or `"none"`.
+### Added
 
-A file must be included in order to be checked. If it is then excluded, it will not be checked. Here is an example layout:
+- TwoEmptyLines psl-lint rule (thanks
+  [@RajkumarVelusamy](https://github.com/RajkumarVelusamy)).
+- MultiLineDeclare psl-lint rule (thanks
+  [@Thirurakshan](https://github.com/Thirurakshan)).
 
-```json
-{
-	"version": 1,
-	"include": {
-		"Z*": ["*"],
-		"*.psl": ["*"],
-		"*": ["TodoInfo"]
-	},
-	"exclude": {}
-}
-```
+## [1.4.0] - 2018-11-10
 
-This will lint files starting with a Z and all .psl files. All rules will be applied to these files. All files will have the TodoInfo rule applied to them.
+### Added
 
-These are the current rules:
-- TodoInfo
-- MemberCamelCase
-- MemberLength
-- MemberStartsWithV
-- MethodDocumentation
-- MethodSeparator
-- MethodParametersOnNewLine
-- PropertyLiteralCase
+- RuntimeStart rule that checks if variables declared outside of a TP Fence
+  are referenced from within.
 
-Additionally, this version also introduces Completion Items with Suggestions as another preview feature for the PSL language.
+## [1.3.3] - 2018-11-06
 
-## v1.1.1
+### Changed
 
-Introduced toggle to enable preview features (`"psl.previewFeatures" : true`). Restart after configuring to enable.
+- Update dependencies
 
-Preview features include:
-- Hover and go-to definitions.
-- Actions for missing separator and documentation on methods.
+## [1.3.2] - 2018-11-01
 
-## v1.1.0
-Implementation of the psl-lint code quality checker. Enable it by adding the setting `"psl.lint" : true` to your settings.json.
+### Changed
 
-## v1.0.1
-Fix a small bug where the Configure Environments button does not update properly.
+- Update dependencies
+- Update travis
 
-## v1.0.0
-Promote to 1.0.0 stable. Introduces language support.
+## [1.3.1] - 2018-11-01
 
-- Tokenizer and parser
-- Data item support
-- Outlines for PSL entities
-- Record completion items
-- Fixes to environment configuration interface
+### Changed
+
+- Update dependencies
+- Update travis
+
+## [1.3.0] - 2018-11-01
+
+### Added
+
+- Mechanism to generate a JSON file that follows the CodeClimate interface.
+
+## [1.2.0] - 2018-10-20
+
+### Added
+
+- Initial publication with the following rules:
+  - TodoInfo psl-lint rule
+  - MemberCamelCase psl-lint rule
+  - MemberLength psl-lint rule
+  - MemberStartsWithV psl-lint rule
+  - MethodDocumentation psl-lint rule
+  - MethodSeparator psl-lint rule
+  - MethodParametersOnNewLine psl-lint rule
+  - PropertyLiteralCase psl-lint rule
+
+[Unreleased]: https://github.com/ing-bank/psl-linter/compare/3559ee427a52837baefcdb9b83cd3b97f8eb3324...HEAD
+
+<!--
+Links of the release below are before the project was split of the main
+ing-bank/vscode-psl project. The link to release 1.2.0 goes to the tag of that
+release. The others do show a diff. In these diffs, the psl-linter related
+changes can be found in the src/pslLint directory.
+-->
+[1.6.0]: https://github.com/ing-bank/psl-linter/compare/lint-v1.5.1...lint-v1.6.0
+[1.5.1]: https://github.com/ing-bank/psl-linter/compare/psl-lint-v1.5.0...lint-v1.5.1
+[1.5.0]: https://github.com/ing-bank/psl-linter/compare/psl-lint-v1.4.0...psl-lint-v1.5.0
+[1.4.0]: https://github.com/ing-bank/psl-linter/compare/psl-lint-v1.3.3...psl-lint-v1.4.0
+[1.3.3]: https://github.com/ing-bank/psl-linter/compare/psl-lint-1.3.2...psl-lint-v1.3.3
+[1.3.2]: https://github.com/ing-bank/psl-linter/compare/psl-lint-1.3.1...psl-lint-1.3.2
+[1.3.1]: https://github.com/ing-bank/psl-linter/compare/psl-lint-1.3.0...psl-lint-1.3.1
+[1.3.0]: https://github.com/ing-bank/psl-linter/compare/psl-lint-v1.2.0...psl-lint-1.3.0
+[1.2.0]: https://github.com/ing-bank/psl-linter/releases/tag/psl-lint-v1.2.0
