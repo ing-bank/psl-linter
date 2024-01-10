@@ -1,0 +1,18 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"rootDirs": [],
+		"rootDir": "src",
+		"declaration": true
+	},
+	"exclude": [
+		"node_modules",
+		"out",
+		"tmp",
+		"dist",
+		"jest.config.ts",
+		"test",
+		"build-package-json.js"
+	],
+}

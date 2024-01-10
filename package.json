@@ -27,12 +27,19 @@
     "url": "https://github.com/ing-bank/psl-linter.git"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "buildts": "tsc",
-    "build": "npm run clean && npm run buildts",
+    "clean": "rimraf lib out dist",
+    "precompile": "npm run clean",
+    "compile": "tsc -p tsconfig.json",
     "lint": "tslint -c tslint.json --project .",
-    "watch": "npm run build -- -watch",
-    "test": "jest"
+    "watch": "npm run compile -- -watch",
+    "pretest": "npm run compile",
+    "test": "jest",
+    "dist": "tsc -p tsconfig.build.json",
+    "prebuild": "npm run clean && npm run lint && npm run test",
+    "build": "npm run dist && npm run generate-package-json && npm run copy-extra-files-dist",
+    "generate-package-json": "node ./build-package-json.js",
+    "copy-extra-files-dist": "cp README.md CHANGELOG.md LICENSE dist/",
+    "release": "npm run build && npm publish --access public dist/"
   },
   "dependencies": {
     "commander": "^9.4.1",
@@ -43,11 +50,12 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^29.2.0",
+    "@types/minimatch": "^5.1.2",
     "@types/node": "^18.11.4",
     "jest": "^29.2.1",
-    "typescript": "^4.8.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",
-    "tslint": "^5.20.1"
+    "tslint": "^5.20.1",
+    "typescript": "^4.8.4"
   }
 }
