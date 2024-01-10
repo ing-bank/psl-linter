@@ -27,15 +27,15 @@ export class RuntimeStart extends MethodRule {
 		return diagnostics;
 	}
 
-	getClass(dotOperator: BinaryOperator): Identifier | undefined {
-		if (dotOperator.kind !== SyntaxKind.BINARY_OPERATOR) return;
-		if (Array.isArray(dotOperator.left)) return;
-		if (!dotOperator.left || dotOperator.left.kind === SyntaxKind.BINARY_OPERATOR) return;
+	getClass(dotOperator: BinaryOperator): Identifier {
+		if (dotOperator.kind !== SyntaxKind.BINARY_OPERATOR) return null;
+		if (Array.isArray(dotOperator.left)) return null;
+		if (!dotOperator.left || dotOperator.left.kind === SyntaxKind.BINARY_OPERATOR) return null;
 		return dotOperator.left as Identifier;
 	}
 
-	getMethod(dotOperator: BinaryOperator): Identifier | undefined {
-		if (dotOperator.kind !== SyntaxKind.BINARY_OPERATOR) return;
+	getMethod(dotOperator: BinaryOperator): Identifier {
+		if (dotOperator.kind !== SyntaxKind.BINARY_OPERATOR) return null;
 		return dotOperator.right as Identifier;
 	}
 

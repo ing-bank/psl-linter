@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as minimatch from 'minimatch';
-import * as path from 'path';
+import * as path from 'node:path';
 
 type ConfigBaseDir = string;
 export let activeConfigs: Map<ConfigBaseDir, RegexConfig> = new Map();
@@ -57,16 +57,17 @@ export async function removeConfig(configPath: string) {
 	activeConfigs.delete(configBaseDir);
 }
 
-export function getConfig(fsPath: string): RegexConfig | undefined {
+export function getConfig(fsPath: string): RegexConfig {
 	for (const configBaseDir of activeConfigs.keys()) {
 		const relative = path.relative(configBaseDir, fsPath);
 		if (!!relative && !relative.startsWith('..') && !path.isAbsolute(relative)) {
 			return activeConfigs.get(configBaseDir);
 		}
 	}
+	return null;
 }
 
-export function matchConfig(fileName: string, ruleName: string, configObj: RegexConfig) {
+export function matchConfig(fileName: string, ruleName: string, configObj: RegexConfig): boolean {
 	let matches: boolean = false;
 	const findMatch = (configSettings: RegexConfigObj[]) => {
 		for (const configSetting of configSettings) {
@@ -75,9 +76,10 @@ export function matchConfig(fileName: string, ruleName: string, configObj: Regex
 				if (rulePattern === '*' || rulePattern === ruleName) return true;
 			}
 		}
+		return false;
 	};
 
-	matches = findMatch(configObj.include) || false;
+	matches = findMatch(configObj.include);
 	if (!matches) return false;
 	return !findMatch(configObj.exclude);
 }

@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { Declaration, Member, Method, Parameter, ParsedDocument, Property } from 'psl-parser';
 import { tokenizer } from 'psl-parser';
 
@@ -130,27 +130,27 @@ export abstract class PslRule extends ProfileComponentRule {
 
 	parsedDocument: ParsedDocument;
 
-	abstract report(...args: any[]): Diagnostic[];
+	abstract override report(...args: any[]): Diagnostic[];
 }
 
 export abstract class MemberRule extends PslRule {
-	abstract report(member: Member): Diagnostic[];
+	abstract override report(member: Member): Diagnostic[];
 }
 
 export abstract class PropertyRule extends PslRule {
-	abstract report(property: Property): Diagnostic[];
+	abstract override report(property: Property): Diagnostic[];
 }
 
 export abstract class MethodRule extends PslRule {
-	abstract report(method: Method): Diagnostic[];
+	abstract override report(method: Method): Diagnostic[];
 }
 
 export abstract class ParameterRule extends PslRule {
-	abstract report(parameter: Parameter, method: Method): Diagnostic[];
+	abstract override report(parameter: Parameter, method: Method): Diagnostic[];
 }
 
 export abstract class DeclarationRule extends PslRule {
-	abstract report(declaration: Declaration, method?: Method): Diagnostic[];
+	abstract override report(declaration: Declaration, method?: Method): Diagnostic[];
 }
 
 type GetTextMethod = (lineNumber: number) => string;
