@@ -7,7 +7,10 @@ describe('Parameter tests', () => {
 	let multiLineDiagnostics: api.Diagnostic[] = [];
 
 	beforeAll(async () => {
-		multiLineDiagnostics = await utils.getDiagnostics('ZMultiLineDeclare.PROC', MultiLineDeclare.name);
+		multiLineDiagnostics = await utils.getDiagnostics(
+			'ZMultiLineDeclare.PROC',
+			MultiLineDeclare.name
+		);
 	});
 
 	test('line 2', () => {

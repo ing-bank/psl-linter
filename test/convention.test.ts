@@ -1,7 +1,7 @@
 import * as api from '../src/api';
 import {
-	MemberCamelCase, MemberLength,
-	MemberLiteralCase, MemberStartsWithV, PropertyIsDummy } from '../src/elementsConventionChecker';
+	MemberCamelCase, MemberLength, MemberLiteralCase, MemberStartsWithV, PropertyIsDummy
+} from '../src/elementsConventionChecker';
 import * as utils from './ruleUtils';
 
 describe('Members tests', () => {
@@ -13,12 +13,30 @@ describe('Members tests', () => {
 	let withDummyDiagnostics: api.Diagnostic[] = [];
 
 	beforeAll(async () => {
-		literalDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberLiteralCase.name);
-		camelCaseDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberCamelCase.name);
-		lengthDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberLength.name);
-		vDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberStartsWithV.name);
-		withoutDummyDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', PropertyIsDummy.name);
-		withDummyDiagnostics = await utils.getDiagnostics('ZParent.PROC', PropertyIsDummy.name);
+		literalDiagnostics = await utils.getDiagnostics(
+			'ZTestConvention.PROC',
+			MemberLiteralCase.name
+		);
+		camelCaseDiagnostics = await utils.getDiagnostics(
+			'ZTestConvention.PROC',
+			MemberCamelCase.name
+		);
+		lengthDiagnostics = await utils.getDiagnostics(
+			'ZTestConvention.PROC',
+			MemberLength.name
+		);
+		vDiagnostics = await utils.getDiagnostics(
+			'ZTestConvention.PROC',
+			MemberStartsWithV.name
+		);
+		withoutDummyDiagnostics = await utils.getDiagnostics(
+			'ZTestConvention.PROC',
+			PropertyIsDummy.name
+		);
+		withDummyDiagnostics = await utils.getDiagnostics(
+			'ZParent.PROC',
+			PropertyIsDummy.name
+		);
 	});
 
 	test('Upper case literal report', () => {
@@ -36,13 +54,15 @@ describe('Members tests', () => {
 	test('Starts with v', () => {
 		const diagnosticsOnLine = utils.diagnosticsOnLine(23, vDiagnostics);
 		expect(diagnosticsOnLine.length).toBe(1);
-		expect(diagnosticsOnLine[0].message).toBe(`Declaration "vString" starts with 'v'.`);
+		expect(diagnosticsOnLine[0].message)
+			.toBe('Declaration "vString" starts with \'v\'.');
 		expect(diagnosticsOnLine[0].severity).toBe(api.DiagnosticSeverity.Warning);
 	});
 	test('Public starts with v', () => {
 		const diagnosticsOnLine = utils.diagnosticsOnLine(24, vDiagnostics);
 		expect(diagnosticsOnLine.length).toBe(1);
-		expect(diagnosticsOnLine[0].message).toBe(`Declaration "vNumber" is public and starts with 'v'.`);
+		expect(diagnosticsOnLine[0].message)
+			.toBe('Declaration "vNumber" is public and starts with \'v\'.');
 		expect(diagnosticsOnLine[0].severity).toBe(api.DiagnosticSeverity.Information);
 	});
 

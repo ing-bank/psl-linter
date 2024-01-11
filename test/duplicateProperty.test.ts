@@ -7,7 +7,10 @@ describe('Parameter tests', () => {
 	let propertyisDuplicate: api.Diagnostic[] = [];
 
 	beforeAll(async () => {
-		propertyisDuplicate = await utils.getDiagnostics('ZDuplicateProperty.PROC', PropertyIsDuplicate.name);
+		propertyisDuplicate = await utils.getDiagnostics(
+			'ZDuplicateProperty.PROC',
+			PropertyIsDuplicate.name
+		);
 	});
 
 	test('line 1', () => {
@@ -87,7 +90,8 @@ describe('Parameter tests', () => {
 	});
 
 	test('line 13', () => {
-		const test1Message = 'Property "inliteral" is already declared with different case.';
+		const test1Message =
+			'Property "inliteral" is already declared with different case.';
 		const diagnostics = utils.diagnosticsOnLine(13, propertyisDuplicate);
 		expect(diagnostics.length).toBe(1);
 		expect(diagnostics[0].message).toBe(test1Message);

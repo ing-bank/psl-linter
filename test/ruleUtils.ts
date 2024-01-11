@@ -10,7 +10,10 @@ import * as api from '../src/api';
  * @param lineNumber Zero-based line number to check, i.e. line 1 of the document is lineNumber 0.
  * @param diagnostics The reports to filter
  */
-export function diagnosticsOnLine(lineNumber: number, diagnostics: api.Diagnostic[]): api.Diagnostic[] {
+export function diagnosticsOnLine(
+	lineNumber: number,
+	diagnostics: api.Diagnostic[]
+): api.Diagnostic[] {
 	const lineDiagnostics = diagnostics.filter(r => r.range.start.line === lineNumber);
 	return lineDiagnostics;
 }
@@ -21,7 +24,10 @@ export function diagnosticsOnLine(lineNumber: number, diagnostics: api.Diagnosti
  * @param testFileName The name of the file located in `${PROJECT_ROOT}/test/files/`
  * @param ruleName Optional parameter to return only diagnostics corresponding to the ruleName
  */
-export async function getDiagnostics(testFileName: string, ruleName?: string): Promise<api.Diagnostic[]> {
+export async function getDiagnostics(
+	testFileName: string,
+	ruleName?: string
+): Promise<api.Diagnostic[]> {
 	const testFilePath = path.resolve('test', 'files', testFileName);
 	const text = await fs.readFile(testFilePath).then(b => b.toString());
 
