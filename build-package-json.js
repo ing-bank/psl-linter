@@ -9,7 +9,8 @@ delete packageJson.scripts
 delete packageJson.devDependencies
 
 // Main and types are now in root
-packageJson.main = 'index.js'
-packageJson.types = 'index.d.ts'
+packageJson.main = 'cli.js'
+packageJson.bin = 'cli.js'
+packageJson.types = 'cli.d.ts'
 
 fs.writeFileSync('./dist/package.json', JSON.stringify(packageJson, null, 2))

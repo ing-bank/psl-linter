@@ -1,6 +1,6 @@
 {
-  "name": "psl-lint",
-  "version": "1.6.0",
+  "name": "@mischareitsma/psl-lint",
+  "version": "1.7.0",
   "description": "Profile Scripting Language Linter",
   "keywords": [
     "PSL",
@@ -17,7 +17,12 @@
   "license": "MIT",
   "author": "atiplea",
   "contributors": [
-    "SOliveira"
+    "SOliveira",
+    {
+      "name": "Mischa Reitsma",
+      "email": "Mischa.Reitsma@ing.com",
+      "url": "https://github.com/mischareitsma"
+    }
   ],
   "main": "./lib/cli.js",
   "types": "./lib/types/cli.d.ts",

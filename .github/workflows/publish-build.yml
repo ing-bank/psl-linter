@@ -1,0 +1,27 @@
+name: 'Publish a new release'
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish-release:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout project'
+        uses: actions/checkout@v4
+
+      - name: 'Setup node 21.1.x'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.1.x
+          cache: npm
+
+      - name: 'Clean install project'
+        run: npm ci
+
+      - name: 'Publish release'
+        run: npm run release
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
