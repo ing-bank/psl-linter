@@ -30,7 +30,11 @@ export class MultiLineDeclare extends MethodRule {
 					if (NON_TYPE_MODIFIERS.indexOf(token.value) > -1) {
 						continue;
 					}
-					if (declaration.types.map(t => t.value).indexOf(token.value) > -1) {
+					if (
+						declaration.types
+							.map(t => t.value)
+							.indexOf(token.value) > -1
+					) {
 						continue;
 					}
 					if (token.isOpenParen()) {
@@ -46,7 +50,12 @@ export class MultiLineDeclare extends MethodRule {
 						commaFound = true;
 						continue;
 					}
-					if (commaFound && token.isEqualSign() && typePresent && conditionOpen === conditionClose) {
+					if (
+						commaFound &&
+						token.isEqualSign() &&
+						typePresent &&
+						conditionOpen === conditionClose
+					) {
 						conditionOpen = false;
 						conditionClose = false;
 						commaFound = false;
@@ -56,7 +65,8 @@ export class MultiLineDeclare extends MethodRule {
 				if (reportVariable) {
 					const diagnostic = new Diagnostic(
 						declaration.id.getRange(),
-						`Declaration ${declaration.id.value} should be initialized on a new line.`,
+						`Declaration ${declaration.id.value} should be ` +
+							'initialized on a new line.',
 						this.ruleName,
 						DiagnosticSeverity.Warning,
 					);

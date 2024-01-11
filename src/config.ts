@@ -3,7 +3,7 @@ import * as minimatch from 'minimatch';
 import * as path from 'node:path';
 
 type ConfigBaseDir = string;
-export let activeConfigs: Map<ConfigBaseDir, RegexConfig> = new Map();
+export const activeConfigs: Map<ConfigBaseDir, RegexConfig> = new Map();
 
 export interface Config {
 	include: ConfigSetting;
@@ -22,7 +22,9 @@ interface RegexConfigObj {
 
 export async function setConfig(configPath: string) {
 	const configBaseDir: ConfigBaseDir = path.dirname(configPath);
-	const config: Config = await fs.readFile(configPath).then(b => JSON.parse(b.toString()));
+	// TODO: (Mischa Reitsma) No validation of the loaded config.
+	const config: Config = await fs.readFile(configPath)
+		.then(b => JSON.parse(b.toString()) as Config);
 	activeConfigs.set(configBaseDir, transform(config));
 }
 
@@ -30,9 +32,9 @@ export function transform(config: Config): RegexConfig {
 	const includes: RegexConfigObj[] = [];
 	const excludes: RegexConfigObj[] = [];
 	for (const pattern in config.include) {
-		if (config.include.hasOwnProperty(pattern)) {
+		if (Object.prototype.hasOwnProperty.call(config.include, pattern)) {
 			const rules = config.include[pattern];
-			const regexpPattern = minimatch.makeRe(pattern)
+			const regexpPattern = minimatch.makeRe(pattern);
 
 			if (!regexpPattern) throw new Error(`Invalid regexp patter ${pattern}`);
 
@@ -40,9 +42,9 @@ export function transform(config: Config): RegexConfig {
 		}
 	}
 	for (const pattern in config.exclude) {
-		if (config.exclude.hasOwnProperty(pattern)) {
+		if (Object.prototype.hasOwnProperty.call(config.exclude, pattern)) {
 			const rules = config.exclude[pattern];
-			const regexpPattern = minimatch.makeRe(pattern)
+			const regexpPattern = minimatch.makeRe(pattern);
 
 			if (!regexpPattern) throw new Error(`Invalid regexp patter ${pattern}`);
 
@@ -52,7 +54,7 @@ export function transform(config: Config): RegexConfig {
 	return { include: includes, exclude: excludes };
 }
 
-export async function removeConfig(configPath: string) {
+export function removeConfig(configPath: string) {
 	const configBaseDir: ConfigBaseDir = path.dirname(configPath);
 	activeConfigs.delete(configBaseDir);
 }

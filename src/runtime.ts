@@ -1,5 +1,5 @@
 import {Member, MemberClass, Method, tokenizer, utilities} from 'psl-parser';
-import {BinaryOperator, Identifier,	StringLiteral, SyntaxKind, Value} from 'psl-parser';
+import {BinaryOperator, Identifier, StringLiteral, SyntaxKind, Value} from 'psl-parser';
 
 import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from './api';
 
@@ -16,7 +16,8 @@ export class RuntimeStart extends MethodRule {
 				const dotOperator = expression as BinaryOperator;
 				const classIdentifier = this.getClass(dotOperator);
 				if (!classIdentifier) return;
-				if (classIdentifier.id.value === 'Runtime') runtimeCalls.push(dotOperator);
+				if (classIdentifier.id.value === 'Runtime')
+					runtimeCalls.push(dotOperator);
 			});
 		});
 
@@ -30,7 +31,8 @@ export class RuntimeStart extends MethodRule {
 	getClass(dotOperator: BinaryOperator): Identifier {
 		if (dotOperator.kind !== SyntaxKind.BINARY_OPERATOR) return null;
 		if (Array.isArray(dotOperator.left)) return null;
-		if (!dotOperator.left || dotOperator.left.kind === SyntaxKind.BINARY_OPERATOR) return null;
+		if (!dotOperator.left || dotOperator.left.kind === SyntaxKind.BINARY_OPERATOR)
+			return null;
 		return dotOperator.left as Identifier;
 	}
 
@@ -52,7 +54,12 @@ export class RuntimeStart extends MethodRule {
 			if (runtimeMethod.id.value === 'start') {
 				if (lastStart) {
 					variables.forEach((identifiers, variable) => {
-						this.createDiagnostic(lastStart, variable, identifiers, diagnostics);
+						this.createDiagnostic(
+							lastStart,
+							variable,
+							identifiers,
+							diagnostics
+						);
 					});
 				}
 				lastStart = runtimeMethod;
@@ -64,17 +71,30 @@ export class RuntimeStart extends MethodRule {
 				else {
 					const startLine = lastStart.id.position.line;
 					const commitLine = runtimeMethod.id.position.line;
-					const identifierTokens: tokenizer.Token[] = this.getAllIdentifersInRange(
-						this.parsedDocument.tokens,
-						startLine,
-						commitLine,
-					);
-					const variablesOutsideStart: Member[] = method.declarations.concat(method.parameters)
+					const identifierTokens: tokenizer.Token[] =
+						this.getAllIdentifersInRange(
+							this.parsedDocument.tokens,
+							startLine,
+							commitLine,
+						);
+					const variablesOutsideStart: Member[] = method.declarations
+						.concat(method.parameters)
 						.filter(variable => {
-							return variable.id.position.line <= startLine && acceptVariables.indexOf(variable.id.value) === -1;
+							return (
+								variable.id.position.line <=
+									startLine &&
+								acceptVariables.indexOf(
+									variable.id.value
+								) === -1
+							);
 						});
 					for (const token of identifierTokens) {
-						this.addVariable(variablesOutsideStart, token, lastStart, variables);
+						this.addVariable(
+							variablesOutsideStart,
+							token,
+							lastStart,
+							variables
+						);
 					}
 
 				}
@@ -82,23 +102,40 @@ export class RuntimeStart extends MethodRule {
 		}
 		if (variables) {
 			variables.forEach((identifiers, variable) => {
-				this.createDiagnostic(lastStart, variable, identifiers, diagnostics);
+				this.createDiagnostic(
+					lastStart,
+					variable,
+					identifiers,
+					diagnostics
+				);
 			});
 		}
 
 	}
-	private getAllIdentifersInRange(tokens: tokenizer.Token[], startLine: number, commitLine: number): tokenizer.Token[] {
+	private getAllIdentifersInRange(
+		tokens: tokenizer.Token[],
+		startLine: number,
+		commitLine: number
+	): tokenizer.Token[] {
 		return tokens.filter(token => {
 			return token.position.line > startLine && token.position.line < commitLine;
 		});
 	}
 
-	private createDiagnostic(lastStart: Value, variable: Member, identifiers: tokenizer.Token[], diagnostics: Diagnostic[]) {
+	private createDiagnostic(
+		lastStart: Value,
+		variable: Member,
+		identifiers: tokenizer.Token[],
+		diagnostics: Diagnostic[]
+	) {
 		const range = this.getDiagnosticRange(lastStart);
-		const word = variable.memberClass === MemberClass.parameter ? 'Parameter' : 'Declaration';
+		const word = variable.memberClass === MemberClass.parameter
+			? 'Parameter' :
+			'Declaration';
 		const diag = new Diagnostic(
 			range,
-			`${word} "${variable.id.value}" referenced inside Runtime.start but not in variable list.`,
+			`${word} "${variable.id.value}" referenced inside Runtime.start but not` + 
+				' in variable list.',
 			this.ruleName,
 			DiagnosticSeverity.Warning,
 			variable,
@@ -108,7 +145,10 @@ export class RuntimeStart extends MethodRule {
 			`Source of "${variable.id.value}"`,
 		);
 		const relatedReferences = identifiers.map(i => {
-			return new DiagnosticRelatedInformation(i.getRange(), `Reference to "${i.value}"`);
+			return new DiagnosticRelatedInformation(
+				i.getRange(),
+				`Reference to "${i.value}"`
+			);
 		});
 		diag.relatedInformation = [
 			relatedSource,
@@ -124,14 +164,18 @@ export class RuntimeStart extends MethodRule {
 		start: Identifier,
 		variables: Map<Member, tokenizer.Token[]>,
 	) {
-		const variable = localVariablesOutsideStart.find(v => v.id.value === identifierToken.value);
+		const variable = localVariablesOutsideStart
+			.find(v => v.id.value === identifierToken.value);
 		if (
 			variable
 			&& variable.id !== variable.types[0]
 			&& variable.modifiers.map(m => m.value).indexOf('literal') === -1
 		) { // no static and literal
 			const varList = start.args[1] as StringLiteral;
-			if (!varList || varList.id.value.split(',').indexOf(variable.id.value) === -1) {
+			if (
+				!varList ||
+				varList.id.value.split(',').indexOf(variable.id.value) === -1
+			) {
 				const tokens = variables.get(variable);
 				if (!tokens) {
 					variables.set(variable, [identifierToken]);
@@ -146,12 +190,20 @@ export class RuntimeStart extends MethodRule {
 	private getDiagnosticRange(start: Identifier): tokenizer.Range {
 		const startPos = start.id.position.character - 'do Runtime.'.length;
 		const endPos = start.closeParen.position.character + 1;
-		return new tokenizer.Range(start.id.position.line, startPos, start.id.position.line, endPos);
+		return new tokenizer.Range(
+			start.id.position.line,
+			startPos,
+			start.id.position.line, 
+			endPos
+		);
 	}
 
 	private addToWhitelist(runtimeMethod: Identifier) {
 		let acceptVariables: string[] = [];
-		const commentsAbove: tokenizer.Token[] = utilities.getCommentsOnLine(this.parsedDocument, runtimeMethod.id.position.line - 1);
+		const commentsAbove: tokenizer.Token[] = utilities.getCommentsOnLine(
+			this.parsedDocument,
+			runtimeMethod.id.position.line - 1
+		);
 		const whiteListComment = commentsAbove[0];
 		if (!whiteListComment || !whiteListComment.isLineComment()) return [];
 

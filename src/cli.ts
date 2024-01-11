@@ -39,7 +39,11 @@ function getMessage(storedDiagnostic: StoredDiagnostic) {
 	const { diagnostic, fsPath } = storedDiagnostic;
 	const range = `${diagnostic.range.start.line + 1},${diagnostic.range.start.character + 1}`;
 	const severity = `${DiagnosticSeverity[diagnostic.severity].substr(0, 4).toUpperCase()}`;
-	return `${fsPath}(${range}) [${severity}][${diagnostic.source}][${diagnostic.ruleName}] ${diagnostic.message}`;
+	return (
+		`${fsPath}(${range}) ` +
+		`[${severity}][${diagnostic.source}][${diagnostic.ruleName}] ` +
+		diagnostic.message
+	);
 }
 
 async function readFile(filename: string): Promise<number> {
@@ -55,12 +59,17 @@ async function readFile(filename: string): Promise<number> {
 	const diagnostics = getDiagnostics(profileComponent, parsedDocument, useConfig);
 
 	diagnostics.forEach(diagnostic => {
-		if (diagnostic.severity === DiagnosticSeverity.Warning || diagnostic.severity === DiagnosticSeverity.Error) {
-			errorCount += 1;
+		if (
+			diagnostic.severity === DiagnosticSeverity.Warning ||
+			diagnostic.severity === DiagnosticSeverity.Error
+		) {
+			errorCount++;
 		}
 		const mapDiagnostics = diagnosticStore.get(diagnostic.source);
-		if (!mapDiagnostics) diagnosticStore.set(diagnostic.source, [{ diagnostic, fsPath }]);
-		else mapDiagnostics.push({ diagnostic, fsPath });
+		if (!mapDiagnostics)
+			diagnosticStore.set(diagnostic.source, [{ diagnostic, fsPath }]);
+		else
+			mapDiagnostics.push({ diagnostic, fsPath });
 	});
 
 	return errorCount;
@@ -68,7 +77,7 @@ async function readFile(filename: string): Promise<number> {
 
 export async function readPath(fileString: string) {
 	const files = fileString.split(';').filter(x => x);
-	const promises: Array<Promise<any>> = [];
+	const promises: Array<Promise<void>> = [];
 	let exitCode = 0;
 	for (const filePath of files) {
 		const absolutePath = path.resolve(filePath);
@@ -77,7 +86,9 @@ export async function readPath(fileString: string) {
 		if (stat.isDirectory()) {
 			const fileNames = await fs.readdir(absolutePath);
 			for (const fileName of fileNames) {
-				const absolutePathInDir = path.resolve(path.join(absolutePath, fileName));
+				const absolutePathInDir = path.resolve(
+					path.join(absolutePath, fileName)
+				);
 				await readPath(absolutePathInDir);
 			}
 		}
@@ -119,7 +130,9 @@ async function outputResults(reportFileName?: string) {
 function printOutputToConsole() {
 	for (const source of diagnosticStore.keys()) {
 		const diagnostics = diagnosticStore.get(source);
-		const word = diagnosticStore.get(source).length === 1 ? 'diagnostic' : 'diagnostics';
+		const word = diagnosticStore.get(source).length === 1
+			? 'diagnostic'
+			: 'diagnostics';
 		console.log(`[${source}] ${diagnostics.length} ${word}:`);
 		diagnostics.forEach(diagnostic => {
 			console.log(getMessage(diagnostic));
@@ -145,7 +158,9 @@ async function generateCodeQualityReport(reportFileName: string) {
 			if (diagnostic.ruleName === 'MemberCamelCase') continue;
 			const issue: CodeClimateIssue = {
 				check_name: diagnostic.ruleName,
-				description: `[${diagnostic.ruleName}] ${diagnostic.message.trim().replace(/\.$/, '')}`,
+				description:
+					`[${diagnostic.ruleName}] ` +
+					`${diagnostic.message.trim().replace(/\.$/, '')}`,
 				fingerprint: hashObject(diagnostic),
 				location: {
 					lines: {
@@ -159,18 +174,20 @@ async function generateCodeQualityReport(reportFileName: string) {
 		}
 	}
 	console.log('Diagnostics found in repository:');
-	(console as any).table(counts);
+	console.table(counts);
 	await fs.writeFile(reportFileName, JSON.stringify(issues));
 }
 
-function hashObject(object: any) {
+// TODO: (Mischa Reitsma) This method is used to generate hashes for the code climate report so issues can be 'identified' by a hash. This accepts a Diagnostic, so should just hash specific fields. Will make the method signature better and can remove the es-lint exceptions.
+function hashObject(object: object) {
 	const hash = crypto.createHash('md5')
 		.update(JSON.stringify(object, (key, value) => {
 			if (key[0] === '_') return undefined; // remove api stuff
 			else if (typeof value === 'function') { // consider functions
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 				return value.toString();
 			}
-			else return value;
+			else return value as string;
 		}))
 		.digest('hex');
 	return hash;
@@ -185,10 +202,13 @@ function getCliArgs() {
 		.option('-o, --output <output>', 'Name of output file')
 		.description('fileString    a ; delimited string of file paths')
 		.parse(process.argv);
-		return { fileString: command.args[0], reportFileName: command.getOptionValue('output') };
+		return {
+			fileString: command.args[0],
+			reportFileName: command.getOptionValue('output') as string
+		};
 	}
 
-(async function main() {
+await (async function main() {
 	if (require.main !== module) {
 		return;
 	}

@@ -121,7 +121,7 @@ export abstract class ProfileComponentRule {
 
 	profileComponent: ProfileComponent;
 
-	abstract report(...args: any[]): Diagnostic[];
+	abstract report(...args: Member[]): Diagnostic[];
 }
 
 export abstract class FileDefinitionRule extends ProfileComponentRule { }
@@ -130,7 +130,7 @@ export abstract class PslRule extends ProfileComponentRule {
 
 	parsedDocument: ParsedDocument;
 
-	abstract override report(...args: any[]): Diagnostic[];
+	abstract override report(...args: Member[]): Diagnostic[];
 }
 
 export abstract class MemberRule extends PslRule {
@@ -218,7 +218,7 @@ export class ProfileComponent {
 	}
 
 	private createIndexedDocument(): Map<number, string> {
-		const indexedDocument = new Map();
+		const indexedDocument = new Map<number, string>();
 		let line: string = '';
 		let index: number = 0;
 		for (const char of this.textDocument) {

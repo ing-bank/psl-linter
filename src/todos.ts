@@ -9,11 +9,18 @@ export class TodoInfo extends PslRule {
 			if (token.value.includes('TODO')) {
 				const startLine = token.position.line;
 				const startChar = token.position.character;
-				todos = todos.concat(getTodosFromComment(token.value, startLine, startChar));
+				todos = todos.concat(
+					getTodosFromComment(token.value, startLine, startChar)
+				);
 			}
 		}
 		return todos.map(todo => {
-			const diagnostic = new Diagnostic(todo.range, todo.message, this.ruleName, DiagnosticSeverity.Information);
+			const diagnostic = new Diagnostic(
+				todo.range,
+				todo.message,
+				this.ruleName,
+				DiagnosticSeverity.Information
+			);
 			diagnostic.source = 'TODO';
 			return diagnostic;
 		});
@@ -34,7 +41,10 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 	const finalize = () => {
 		if (!todo) return;
 		const start = todo.range.start;
-		const end = new tokenizer.Position(currentLine, todo.range.end.character + todo.message.trimRight().length);
+		const end = new tokenizer.Position(
+			currentLine,
+			todo.range.end.character + todo.message.trimEnd().length
+		);
 		todo.range = new tokenizer.Range(start, end);
 		todo.message = todo.message.trim().replace(/^:/gm, '').trim();
 		if (!todo.message) todo.message = `TODO on line ${todo.range.start.line + 1}.`;
@@ -45,13 +55,22 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 	const tokens = tokenizer.getTokens(commentText);
 	for (const token of tokens) {
 		currentLine = startLine + token.position.line;
-		currentChar = startLine === currentLine ? token.position.character + startChar : token.position.character;
+		currentChar = startLine === currentLine
+			? token.position.character + startChar
+			: token.position.character;
 		if (token.isBlockCommentInit() || token.isLineCommentInit()) continue;
 		else if (token.isBlockComment() || token.isLineComment()) {
-			todos = todos.concat(getTodosFromComment(token.value, currentLine, currentChar));
+			todos = todos.concat(
+				getTodosFromComment(token.value, currentLine, currentChar)
+			);
 		}
 		else if (token.value === 'TODO' && !todo) {
-			const range = new tokenizer.Range(currentLine, currentChar, currentLine, currentChar + 4);
+			const range = new tokenizer.Range(
+				currentLine,
+				currentChar,
+				currentLine,
+				currentChar + 4
+			);
 			const message = '';
 			todo = { range, message };
 		}

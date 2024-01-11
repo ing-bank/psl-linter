@@ -38,7 +38,12 @@ export class PropertyIsDummy extends PropertyRule {
 	isCalledDummy(member: Member, diagnostics: Diagnostic[]): void {
 		if (member.id.value.toLowerCase() === 'dummy') {
 			diagnostics.push(
-				createDiagnostic(member, 'Usage of "dummy" property is discouraged', DiagnosticSeverity.Information, this.ruleName),
+				createDiagnostic(
+					member,
+					'Usage of "dummy" property is discouraged',
+					DiagnosticSeverity.Information,
+					this.ruleName
+				),
 			);
 		}
 	}
@@ -54,8 +59,12 @@ export class PropertyIsDuplicate extends PropertyRule {
 
 	isDuplicateProperty(property: Property, diagnostics: Diagnostic[]): void {
 
-		const slicedProperty = this.parsedDocument.properties.slice(0,
-			this.parsedDocument.properties.findIndex(x => x.id.position.line === property.id.position.line));
+		const slicedProperty = this.parsedDocument.properties.slice(
+			0,
+			this.parsedDocument.properties.findIndex(
+				x => x.id.position.line === property.id.position.line
+			)
+		);
 
 		for (const checkProperty of slicedProperty) {
 
@@ -78,10 +87,14 @@ export class PropertyIsDuplicate extends PropertyRule {
 				break;
 			}
 
-			if (checkProperty.id.value.toLowerCase() === property.id.value.toLowerCase()) {
+			if (
+				checkProperty.id.value.toLowerCase() 
+					=== property.id.value.toLowerCase()
+			) {
 				const diagnostic = new Diagnostic(
 					property.id.getRange(),
-					`Property "${property.id.value}" is already declared with different case.`,
+					`Property "${property.id.value}" is already declared ` +
+						'with different case.',
 					this.ruleName,
 					DiagnosticSeverity.Warning,
 				);
@@ -111,7 +124,12 @@ export class MemberLiteralCase extends MemberRule {
 		if ((member.modifiers.findIndex(x => x.value === 'literal') > -1)) {
 			if (member.id.value !== member.id.value.toUpperCase()) {
 				diagnostics.push(
-					createDiagnostic(member, 'is literal but not upper case.', DiagnosticSeverity.Warning, this.ruleName),
+					createDiagnostic(
+						member,
+						'is literal but not upper case.',
+						DiagnosticSeverity.Warning, 
+						this.ruleName
+					),
 				);
 			}
 		}
@@ -152,7 +170,8 @@ export class MemberCamelCase extends MemberRule {
 			if (isPublicDeclaration(member)) {
 				const diagnostic = new Diagnostic(
 					member.id.getRange(),
-					`Declaration "${member.id.value}" is public and does not start with lower case.`,
+					`Declaration "${member.id.value}" is public and does not ` +
+						'start with lower case.',
 					this.ruleName,
 					DiagnosticSeverity.Information,
 				);
@@ -208,13 +227,18 @@ export class MemberStartsWithV extends MemberRule {
 		if (isPublicDeclaration(member)) {
 			diagnostics.push(createDiagnostic(
 				member,
-				`is public and starts with 'v'.`,
+				'is public and starts with \'v\'.',
 				DiagnosticSeverity.Information,
 				this.ruleName,
 			));
 		}
 		else {
-			diagnostics.push(createDiagnostic(member, `starts with 'v'.`, DiagnosticSeverity.Warning, this.ruleName));
+			diagnostics.push(createDiagnostic(
+				member,
+				'starts with \'v\'.',
+				DiagnosticSeverity.Warning,
+				this.ruleName
+			));
 		}
 	}
 }

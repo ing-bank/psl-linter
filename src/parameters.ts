@@ -16,15 +16,33 @@ export class MethodParametersOnNewLine extends MethodRule {
 		let previousParam: Parameter | undefined;
 		for (const param of method.parameters) {
 			const paramPosition = param.id.position;
-			if (previousParam && paramPosition.line === previousParam.id.position.line) {
-				const message = `Parameter "${param.id.value}" on same line as parameter "${previousParam.id.value}".`;
-				const diagnostic = new Diagnostic(param.id.getRange(), message, this.ruleName, DiagnosticSeverity.Warning);
+			if (
+				previousParam &&
+				paramPosition.line === previousParam.id.position.line
+			) {
+				const message = `Parameter "${param.id.value}" on same line as ` + 
+					`parameter "${previousParam.id.value}".`;
+				const diagnostic = new Diagnostic(
+					param.id.getRange(),
+					message,
+					this.ruleName,
+					DiagnosticSeverity.Warning
+				);
 				diagnostic.source = 'lint';
 				diagnostics.push(diagnostic);
 			}
-			else if (method.parameters.length > 1 && paramPosition.line === methodLine) {
-				const message = `Parameter "${param.id.value}" on same line as label "${method.id.value}".`;
-				const diagnostic = new Diagnostic(param.id.getRange(), message, this.ruleName, DiagnosticSeverity.Warning);
+			else if (
+				method.parameters.length > 1 &&
+				paramPosition.line === methodLine
+			) {
+				const message = `Parameter "${param.id.value}" on same line as ` +
+					`label "${method.id.value}".`;
+				const diagnostic = new Diagnostic(
+					param.id.getRange(),
+					message,
+					this.ruleName,
+					DiagnosticSeverity.Warning
+				);
 				diagnostic.source = 'lint';
 				diagnostics.push(diagnostic);
 			}
