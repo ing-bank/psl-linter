@@ -11,7 +11,7 @@ module.exports = {
 		"warnOnUnsupportedTypeScriptVersion": true,
 	},
 	"ignorePatterns": [
-		"jest.config.js",
+		"jest.config.ts",
 		".eslintrc.cjs",
 		"**/out/**",
 		"**/dist/**",
