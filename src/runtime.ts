@@ -1,5 +1,7 @@
-import {Member, MemberClass, Method, tokenizer, utilities} from 'psl-parser';
-import {BinaryOperator, Identifier, StringLiteral, SyntaxKind, Value} from 'psl-parser';
+import {
+	Member, MemberClass, Method, tokenizer, utilities, BinaryOperator, Identifier,
+	StringLiteral, SyntaxKind, Value
+} from '@mischareitsma/psl-parser';
 
 import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from './api';
 

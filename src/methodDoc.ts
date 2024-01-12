@@ -1,4 +1,4 @@
-import { Method, ParsedDocument, tokenizer, utilities } from 'psl-parser';
+import { Method, ParsedDocument, tokenizer, utilities } from '@mischareitsma/psl-parser';
 import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
 
 export enum Code {

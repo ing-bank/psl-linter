@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { tokenizer } from 'psl-parser';
+import { tokenizer } from '@mischareitsma/psl-parser';
 import { Diagnostic, DiagnosticSeverity, FileDefinitionRule } from './api';
 
 /**

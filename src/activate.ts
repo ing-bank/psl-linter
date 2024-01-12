@@ -4,11 +4,11 @@ import {
 	ProfileComponent, ProfileComponentRule, PropertyRule, PslRule,
 } from './api';
 import { getConfig, matchConfig } from './config';
+import { Member, ParsedDocument } from '@mischareitsma/psl-parser';
 
 /**
  * Import rules here.
  */
-import { Member, ParsedDocument } from 'psl-parser';
 import {
 	MemberCamelCase, MemberLength, MemberLiteralCase,
 	MemberStartsWithV, PropertyIsDummy, PropertyIsDuplicate,

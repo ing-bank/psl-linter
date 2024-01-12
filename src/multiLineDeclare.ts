@@ -1,4 +1,4 @@
-import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from 'psl-parser';
+import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from '@mischareitsma/psl-parser';
 import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
 
 export class MultiLineDeclare extends MethodRule {
