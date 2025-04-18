@@ -1,10 +1,10 @@
-import * as path from 'path';
+import * as path from "path";
 import {
 	DeclarationRule, Diagnostic, FileDefinitionRule, MemberRule, MethodRule, ParameterRule,
 	ProfileComponent, ProfileComponentRule, PropertyRule, PslRule,
-} from './api';
-import { getConfig, matchConfig } from './config';
-import { Member, ParsedDocument } from '@mischareitsma/psl-parser';
+} from "./api";
+import { getConfig, matchConfig } from "./config";
+import { Member, ParsedDocument } from "@mischareitsma/psl-parser";
 
 /**
  * Import rules here.
@@ -12,13 +12,13 @@ import { Member, ParsedDocument } from '@mischareitsma/psl-parser';
 import {
 	MemberCamelCase, MemberLength, MemberLiteralCase,
 	MemberStartsWithV, PropertyIsDummy, PropertyIsDuplicate,
-} from './elementsConventionChecker';
-import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from './methodDoc';
-import { MultiLineDeclare } from './multiLineDeclare';
-import { MethodParametersOnNewLine } from './parameters';
-import { RuntimeStart } from './runtime';
-import { TblColDocumentation } from './tblcolDoc';
-import { TodoInfo } from './todos';
+} from "./elementsConventionChecker";
+import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from "./methodDoc";
+import { MultiLineDeclare } from "./multiLineDeclare";
+import { MethodParametersOnNewLine } from "./parameters";
+import { RuntimeStart } from "./runtime";
+import { TblColDocumentation } from "./tblcolDoc";
+import { TodoInfo } from "./todos";
 
 /**
  * Add new rules here to have them checked at the appropriate time.

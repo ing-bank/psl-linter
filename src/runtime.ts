@@ -1,9 +1,9 @@
 import {
 	Member, MemberClass, Method, tokenizer, utilities, BinaryOperator, Identifier,
 	StringLiteral, SyntaxKind, Value
-} from '@mischareitsma/psl-parser';
+} from "@mischareitsma/psl-parser";
 
-import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from './api';
+import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from "./api";
 
 export class RuntimeStart extends MethodRule {
 
@@ -12,13 +12,13 @@ export class RuntimeStart extends MethodRule {
 		const runtimeCalls: BinaryOperator[] = [];
 
 		method.statements.filter(statement => {
-			return statement.action.value === 'do';
+			return statement.action.value === "do";
 		}).forEach(statement => {
 			statement.expressions.forEach(expression => {
 				const dotOperator = expression as BinaryOperator;
 				const classIdentifier = this.getClass(dotOperator);
 				if (!classIdentifier) return;
-				if (classIdentifier.id.value === 'Runtime')
+				if (classIdentifier.id.value === "Runtime")
 					runtimeCalls.push(dotOperator);
 			});
 		});
@@ -53,7 +53,7 @@ export class RuntimeStart extends MethodRule {
 		let acceptVariables: string[] = [];
 		for (const runtimeCall of runtimeCalls) {
 			const runtimeMethod = this.getMethod(runtimeCall);
-			if (runtimeMethod.id.value === 'start') {
+			if (runtimeMethod.id.value === "start") {
 				if (lastStart) {
 					variables.forEach((identifiers, variable) => {
 						this.createDiagnostic(
@@ -68,7 +68,7 @@ export class RuntimeStart extends MethodRule {
 				variables = new Map();
 				acceptVariables = this.addToWhitelist(runtimeMethod);
 			}
-			else if (runtimeMethod.id.value === 'commit') {
+			else if (runtimeMethod.id.value === "commit") {
 				if (!lastStart) continue;
 				else {
 					const startLine = lastStart.id.position.line;
@@ -132,12 +132,12 @@ export class RuntimeStart extends MethodRule {
 	) {
 		const range = this.getDiagnosticRange(lastStart);
 		const word = variable.memberClass === MemberClass.parameter
-			? 'Parameter' :
-			'Declaration';
+			? "Parameter" :
+			"Declaration";
 		const diag = new Diagnostic(
 			range,
 			`${word} "${variable.id.value}" referenced inside Runtime.start but not` + 
-				' in variable list.',
+				" in variable list.",
 			this.ruleName,
 			DiagnosticSeverity.Warning,
 			variable,
@@ -156,7 +156,7 @@ export class RuntimeStart extends MethodRule {
 			relatedSource,
 			...relatedReferences,
 		];
-		diag.source = 'tpfence';
+		diag.source = "tpfence";
 		diagnostics.push(diag);
 	}
 
@@ -171,12 +171,12 @@ export class RuntimeStart extends MethodRule {
 		if (
 			variable
 			&& variable.id !== variable.types[0]
-			&& variable.modifiers.map(m => m.value).indexOf('literal') === -1
+			&& variable.modifiers.map(m => m.value).indexOf("literal") === -1
 		) { // no static and literal
 			const varList = start.args[1] as StringLiteral;
 			if (
 				!varList ||
-				varList.id.value.split(',').indexOf(variable.id.value) === -1
+				varList.id.value.split(",").indexOf(variable.id.value) === -1
 			) {
 				const tokens = variables.get(variable);
 				if (!tokens) {
@@ -190,7 +190,7 @@ export class RuntimeStart extends MethodRule {
 	}
 
 	private getDiagnosticRange(start: Identifier): tokenizer.Range {
-		const startPos = start.id.position.character - 'do Runtime.'.length;
+		const startPos = start.id.position.character - "do Runtime.".length;
 		const endPos = start.closeParen.position.character + 1;
 		return new tokenizer.Range(
 			start.id.position.line,
@@ -210,15 +210,15 @@ export class RuntimeStart extends MethodRule {
 		if (!whiteListComment || !whiteListComment.isLineComment()) return [];
 
 		const comment = whiteListComment.value.trim();
-		if (!comment.startsWith('@psl-lint.RuntimeStart')) return [];
+		if (!comment.startsWith("@psl-lint.RuntimeStart")) return [];
 
-		const args = comment.replace(/^@psl-lint\.RuntimeStart\s+/, '').split('=');
+		const args = comment.replace(/^@psl-lint\.RuntimeStart\s+/, "").split("=");
 		for (let i = 0; i < args.length; i += 2) {
 			const arg = args[i];
 			const value = args[i + 1];
-			if (arg === 'accept' && value) {
-				const strippedValue = value.replace(/"/g, '');
-				acceptVariables = strippedValue.split(',');
+			if (arg === "accept" && value) {
+				const strippedValue = value.replace(/"/g, "");
+				acceptVariables = strippedValue.split(",");
 			}
 		}
 

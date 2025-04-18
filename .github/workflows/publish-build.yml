@@ -12,10 +12,10 @@ jobs:
       - name: 'Checkout project'
         uses: actions/checkout@v4
 
-      - name: 'Setup node 21.1.x'
-        uses: actions/setup-node@v3
+      - name: 'Setup node 22.x'
+        uses: actions/setup-node@v4
         with:
-          node-version: 21.1.x
+          node-version: 22.x
           cache: npm
 
       - name: 'Clean install project'

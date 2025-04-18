@@ -1,8 +1,8 @@
-import * as path from 'node:path';
+import * as path from "node:path";
 import {
 	Declaration, Member, Method, Parameter, ParsedDocument, Property
-} from '@mischareitsma/psl-parser';
-import { tokenizer } from '@mischareitsma/psl-parser';
+} from "@mischareitsma/psl-parser";
+import { tokenizer } from "@mischareitsma/psl-parser";
 
 export enum DiagnosticSeverity {
 
@@ -76,10 +76,10 @@ export class Diagnostic {
 	 * @param severity The severity, default is [error](#DiagnosticSeverity.Error).
 	 */
 	constructor(range: tokenizer.Range,
-				message: string,
-				ruleName: string,
-				severity?: DiagnosticSeverity,
-				member?: Member) {
+		message: string,
+		ruleName: string,
+		severity?: DiagnosticSeverity,
+		member?: Member) {
 		this.range = range;
 		this.message = message;
 		this.ruleName = ruleName;
@@ -164,15 +164,15 @@ type GetTextMethod = (lineNumber: number) => string;
 export class ProfileComponent {
 
 	static isPsl(fsPath: string): boolean {
-		return path.extname(fsPath) === '.PROC'
-			|| path.extname(fsPath) === '.BATCH'
-			|| path.extname(fsPath) === '.TRIG'
-			|| path.extname(fsPath).toUpperCase() === '.PSL';
+		return path.extname(fsPath) === ".PROC"
+			|| path.extname(fsPath) === ".BATCH"
+			|| path.extname(fsPath) === ".TRIG"
+			|| path.extname(fsPath).toUpperCase() === ".PSL";
 	}
 
 	static isFileDefinition(fsPath: string): boolean {
-		return path.extname(fsPath) === '.TBL'
-			|| path.extname(fsPath) === '.COL';
+		return path.extname(fsPath) === ".TBL"
+			|| path.extname(fsPath) === ".COL";
 	}
 
 	static isProfileComponent(fsPath: string): boolean {
@@ -197,12 +197,12 @@ export class ProfileComponent {
 	 */
 	getTextAtLine(lineNumber: number): string {
 		if (lineNumber < 0) {
-			throw new Error('Cannot get text at negative line number.');
+			throw new Error("Cannot get text at negative line number.");
 		}
 		if (!this.indexedDocument) {
 			this.indexedDocument = this.createIndexedDocument();
 		}
-		return this.indexedDocument.get(lineNumber) || '';
+		return this.indexedDocument.get(lineNumber) || "";
 	}
 
 	/**
@@ -221,14 +221,14 @@ export class ProfileComponent {
 
 	private createIndexedDocument(): Map<number, string> {
 		const indexedDocument = new Map<number, string>();
-		let line: string = '';
+		let line: string = "";
 		let index: number = 0;
 		for (const char of this.textDocument) {
 			line += char;
-			if (char === '\n') {
+			if (char === "\n") {
 				indexedDocument.set(index, line);
 				index++;
-				line = '';
+				line = "";
 			}
 		}
 		return indexedDocument;

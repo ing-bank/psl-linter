@@ -3,14 +3,15 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": false,
 		"moduleResolution": "node",
-		"module": "CommonJS",
-		"target": "esnext",
-		"outDir": "out",
+		"module": "ESNext",
+		"target": "ESNext",
 		"lib": [
-			"esnext"
+			"ESNext"
 		],
 		"inlineSourceMap": true,
-		"rootDirs": ["src", "test"],
+		"declaration": true,
+		"rootDir": "src",
+		"outDir": "dist",
 		"alwaysStrict": true,
 		"noImplicitThis": true,
 		"forceConsistentCasingInFileNames": true,
@@ -25,7 +26,7 @@
 		"dist",
 		"lib",
 		"tmp",
-		"jest.config.ts",
+		"test",
 		"build-package-json.js",
 	],
 }

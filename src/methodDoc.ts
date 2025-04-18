@@ -1,5 +1,5 @@
-import { Method, ParsedDocument, tokenizer, utilities } from '@mischareitsma/psl-parser';
-import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
+import { Method, ParsedDocument, tokenizer, utilities } from "@mischareitsma/psl-parser";
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 export enum Code {
 	ONE_EMPTY_LINE = 1,
@@ -69,11 +69,11 @@ export class TwoEmptyLines extends MethodRule {
 		}
 
 		const hasOneSpaceAbove: boolean =
-			this.profileComponent.getTextAtLine(lineAbove).trim() === '';
+			this.profileComponent.getTextAtLine(lineAbove).trim() === "";
 		const hasTwoSpacesAbove: boolean =
-			this.profileComponent.getTextAtLine(lineAbove - 1).trim() === '';
+			this.profileComponent.getTextAtLine(lineAbove - 1).trim() === "";
 		const hasThreeSpacesAbove: boolean =
-			this.profileComponent.getTextAtLine(lineAbove - 2).trim() === '';
+			this.profileComponent.getTextAtLine(lineAbove - 2).trim() === "";
 
 		let code: Code | undefined;
 		if (!hasTwoSpacesAbove) code = Code.ONE_EMPTY_LINE;
@@ -90,7 +90,7 @@ export class TwoEmptyLines extends MethodRule {
 
 		// Check more than 2 empty lines above a method
 		if (hasOneSpaceAbove && hasTwoSpacesAbove && hasThreeSpacesAbove) {
-			const message = 'There are more than two empty lines above label ' +
+			const message = "There are more than two empty lines above label " +
 				`"${idToken.value}".`;
 			diagnostics.push(
 				addDiagnostic(idToken, method, message, this.ruleName, code)
@@ -110,7 +110,7 @@ function addDiagnostic(
 ): Diagnostic {
 	const range = idToken.getRange();
 	const diagnostic = new Diagnostic(range, message, ruleName, DiagnosticSeverity.Information);
-	diagnostic.source = 'lint';
+	diagnostic.source = "lint";
 	diagnostic.member = method;
 	if (code) diagnostic.code = code;
 	return diagnostic;

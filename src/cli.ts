@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
-import * as crypto from 'crypto';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import * as process from 'process';
-import { parseText } from '@mischareitsma/psl-parser';
-import { getDiagnostics } from './activate';
-import { Diagnostic, DiagnosticSeverity, ProfileComponent } from './api';
-import { setConfig } from './config';
+import { Command } from "commander";
+import * as crypto from "crypto";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as process from "process";
+import { parseText } from "@mischareitsma/psl-parser";
+import { getDiagnostics } from "./activate";
+import { Diagnostic, DiagnosticSeverity, ProfileComponent } from "./api";
+import { setConfig } from "./config";
 
 interface CodeClimateIssue {
 	categories?: string[];
@@ -76,7 +76,7 @@ async function readFile(filename: string): Promise<number> {
 }
 
 export async function readPath(fileString: string) {
-	const files = fileString.split(';').filter(x => x);
+	const files = fileString.split(";").filter(x => x);
 	const promises: Array<Promise<void>> = [];
 	let exitCode = 0;
 	for (const filePath of files) {
@@ -107,7 +107,7 @@ export async function readPath(fileString: string) {
 }
 
 async function processConfig(): Promise<void> {
-	const configPath = path.join(process.cwd(), 'psl-lint.json');
+	const configPath = path.join(process.cwd(), "psl-lint.json");
 	await fs.lstat(configPath).then(async () => {
 		await setConfig(configPath);
 		useConfig = true;
@@ -119,11 +119,11 @@ async function processConfig(): Promise<void> {
 async function outputResults(reportFileName?: string) {
 	if (reportFileName) {
 		await generateCodeQualityReport(reportFileName);
-		console.log('Finished report.');
+		console.log("Finished report.");
 	}
 	else {
 		printOutputToConsole();
-		console.log('Finished lint.');
+		console.log("Finished lint.");
 	}
 }
 
@@ -131,8 +131,8 @@ function printOutputToConsole() {
 	for (const source of diagnosticStore.keys()) {
 		const diagnostics = diagnosticStore.get(source);
 		const word = diagnosticStore.get(source).length === 1
-			? 'diagnostic'
-			: 'diagnostics';
+			? "diagnostic"
+			: "diagnostics";
 		console.log(`[${source}] ${diagnostics.length} ${word}:`);
 		diagnostics.forEach(diagnostic => {
 			console.log(getMessage(diagnostic));
@@ -155,12 +155,12 @@ async function generateCodeQualityReport(reportFileName: string) {
 			else {
 				counts[diagnostic.ruleName] = counts[diagnostic.ruleName] + 1;
 			}
-			if (diagnostic.ruleName === 'MemberCamelCase') continue;
+			if (diagnostic.ruleName === "MemberCamelCase") continue;
 			const issue: CodeClimateIssue = {
 				check_name: diagnostic.ruleName,
 				description:
 					`[${diagnostic.ruleName}] ` +
-					`${diagnostic.message.trim().replace(/\.$/, '')}`,
+					`${diagnostic.message.trim().replace(/\.$/, "")}`,
 				fingerprint: hashObject(diagnostic),
 				location: {
 					lines: {
@@ -173,40 +173,39 @@ async function generateCodeQualityReport(reportFileName: string) {
 			issues.push(issue);
 		}
 	}
-	console.log('Diagnostics found in repository:');
+	console.log("Diagnostics found in repository:");
 	console.table(counts);
 	await fs.writeFile(reportFileName, JSON.stringify(issues));
 }
 
 // TODO: (Mischa Reitsma) This method is used to generate hashes for the code climate report so issues can be 'identified' by a hash. This accepts a Diagnostic, so should just hash specific fields. Will make the method signature better and can remove the es-lint exceptions.
 function hashObject(object: object) {
-	const hash = crypto.createHash('md5')
+	const hash = crypto.createHash("md5")
 		.update(JSON.stringify(object, (key, value) => {
-			if (key[0] === '_') return undefined; // remove api stuff
-			else if (typeof value === 'function') { // consider functions
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+			if (key[0] === "_") return undefined; // remove api stuff
+			else if (typeof value === "function") { // consider functions
 				return value.toString();
 			}
 			else return value as string;
 		}))
-		.digest('hex');
+		.digest("hex");
 	return hash;
 }
 
 function getCliArgs() {
-	const command = new Command('psl-lint');
+	const command = new Command("psl-lint");
 	command
-		.argument('<fileList>')
-		.name('psl-lint')
-		.usage('<fileString>')
-		.option('-o, --output <output>', 'Name of output file')
-		.description('fileString    a ; delimited string of file paths')
+		.argument("<fileList>")
+		.name("psl-lint")
+		.usage("<fileString>")
+		.option("-o, --output <output>", "Name of output file")
+		.description("fileString    a ; delimited string of file paths")
 		.parse(process.argv);
-		return {
-			fileString: command.args[0],
-			reportFileName: command.getOptionValue('output') as string
-		};
-	}
+	return {
+		fileString: command.args[0],
+		reportFileName: command.getOptionValue("output") as string
+	};
+}
 
 await (async function main() {
 	if (require.main !== module) {
@@ -217,15 +216,15 @@ await (async function main() {
 
 		await processConfig();
 
-		if (reportFileName) console.log('Starting report.');
-		else console.log('Starting lint.');
+		if (reportFileName) console.log("Starting report.");
+		else console.log("Starting lint.");
 
 		const exitCode = await readPath(fileString);
 		await outputResults(reportFileName);
 		process.exit(exitCode);
 	}
 	else {
-		console.log('Nothing to lint.');
+		console.log("Nothing to lint.");
 	}
 })();
 

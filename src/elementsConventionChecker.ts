@@ -1,8 +1,8 @@
-import { Member, MemberClass, Method, Property } from '@mischareitsma/psl-parser';
+import { Member, MemberClass, Method, Property } from "@mischareitsma/psl-parser";
 import {
 	Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MemberRule,
 	MethodRule, PropertyRule,
-} from './api';
+} from "./api";
 
 export class MethodStartsWithZ extends MethodRule {
 
@@ -36,7 +36,7 @@ export class PropertyIsDummy extends PropertyRule {
 	}
 
 	isCalledDummy(member: Member, diagnostics: Diagnostic[]): void {
-		if (member.id.value.toLowerCase() === 'dummy') {
+		if (member.id.value.toLowerCase() === "dummy") {
 			diagnostics.push(
 				createDiagnostic(
 					member,
@@ -82,7 +82,7 @@ export class PropertyIsDuplicate extends PropertyRule {
 				diagnostic.relatedInformation = [
 					aboveDuplicateProperty,
 				];
-				diagnostic.source = 'lint';
+				diagnostic.source = "lint";
 				diagnostics.push(diagnostic);
 				break;
 			}
@@ -94,7 +94,7 @@ export class PropertyIsDuplicate extends PropertyRule {
 				const diagnostic = new Diagnostic(
 					property.id.getRange(),
 					`Property "${property.id.value}" is already declared ` +
-						'with different case.',
+						"with different case.",
 					this.ruleName,
 					DiagnosticSeverity.Warning,
 				);
@@ -105,7 +105,7 @@ export class PropertyIsDuplicate extends PropertyRule {
 				diagnostic.relatedInformation = [
 					aboveDuplicateProperty,
 				];
-				diagnostic.source = 'lint';
+				diagnostic.source = "lint";
 				diagnostics.push(diagnostic);
 				break;
 			}
@@ -121,12 +121,12 @@ export class MemberLiteralCase extends MemberRule {
 		return diagnostics;
 	}
 	checkUpperCase(member: Property, diagnostics: Diagnostic[]): void {
-		if ((member.modifiers.findIndex(x => x.value === 'literal') > -1)) {
+		if ((member.modifiers.findIndex(x => x.value === "literal") > -1)) {
 			if (member.id.value !== member.id.value.toUpperCase()) {
 				diagnostics.push(
 					createDiagnostic(
 						member,
-						'is literal but not upper case.',
+						"is literal but not upper case.",
 						DiagnosticSeverity.Warning, 
 						this.ruleName
 					),
@@ -147,7 +147,7 @@ export class MemberCamelCase extends MemberRule {
 	}
 
 	memberCase(member: Member, diagnostics: Diagnostic[]): void {
-		const isLiteral = (member.modifiers.findIndex(x => x.value === 'literal') > -1);
+		const isLiteral = (member.modifiers.findIndex(x => x.value === "literal") > -1);
 		let isStaticDeclaration = false;
 
 		member.types.forEach(type => {
@@ -157,7 +157,7 @@ export class MemberCamelCase extends MemberRule {
 		});
 
 		// exception for variables starting with percentage
-		if (member.id.value.charAt(0) === '%') return;
+		if (member.id.value.charAt(0) === "%") return;
 		// exception for literal properties
 		if (isLiteral || isStaticDeclaration) return;
 
@@ -166,23 +166,23 @@ export class MemberCamelCase extends MemberRule {
 			if (method.batch) return;
 		}
 
-		if (member.id.value.charAt(0) > 'z' || member.id.value.charAt(0) < 'a') {
+		if (member.id.value.charAt(0) > "z" || member.id.value.charAt(0) < "a") {
 			if (isPublicDeclaration(member)) {
 				const diagnostic = new Diagnostic(
 					member.id.getRange(),
 					`Declaration "${member.id.value}" is public and does not ` +
-						'start with lower case.',
+						"start with lower case.",
 					this.ruleName,
 					DiagnosticSeverity.Information,
 				);
-				diagnostic.source = 'lint';
+				diagnostic.source = "lint";
 				diagnostic.member = member;
 				diagnostics.push(diagnostic);
 			}
 			else {
 				diagnostics.push(createDiagnostic(
 					member,
-					'does not start with lowercase.',
+					"does not start with lowercase.",
 					DiagnosticSeverity.Warning,
 					this.ruleName,
 				));
@@ -205,7 +205,7 @@ export class MemberLength extends MemberRule {
 		if (member.id.value.length > 25) {
 			diagnostics.push(createDiagnostic(
 				member,
-				'is longer than 25 characters.',
+				"is longer than 25 characters.",
 				DiagnosticSeverity.Warning,
 				this.ruleName,
 			));
@@ -223,11 +223,11 @@ export class MemberStartsWithV extends MemberRule {
 	}
 
 	checkStartsWithV(member: Member, diagnostics: Diagnostic[]): void {
-		if (member.id.value.charAt(0) !== 'v') return;
+		if (member.id.value.charAt(0) !== "v") return;
 		if (isPublicDeclaration(member)) {
 			diagnostics.push(createDiagnostic(
 				member,
-				'is public and starts with \'v\'.',
+				"is public and starts with 'v'.",
 				DiagnosticSeverity.Information,
 				this.ruleName,
 			));
@@ -235,7 +235,7 @@ export class MemberStartsWithV extends MemberRule {
 		else {
 			diagnostics.push(createDiagnostic(
 				member,
-				'starts with \'v\'.',
+				"starts with 'v'.",
 				DiagnosticSeverity.Warning,
 				this.ruleName
 			));
@@ -255,14 +255,14 @@ function createDiagnostic(
 		ruleName,
 		diagnosticSeverity,
 	);
-	diagnostic.source = 'lint';
+	diagnostic.source = "lint";
 	diagnostic.member = member;
 	return diagnostic;
 }
 
 function startsWithZ(member: Member, diagnostics: Diagnostic[], ruleName: string) {
 	const firstChar = member.id.value.charAt(0);
-	if (firstChar === 'z' || firstChar === 'Z') {
+	if (firstChar === "z" || firstChar === "Z") {
 		diagnostics.push(createDiagnostic(
 			member,
 			`starts with '${firstChar}'.`,
@@ -274,10 +274,10 @@ function startsWithZ(member: Member, diagnostics: Diagnostic[], ruleName: string
 function printEnum(memberClass: MemberClass): string {
 	const enumName = MemberClass[memberClass];
 	const capitalizedEnumName = enumName.charAt(0).toUpperCase() + enumName.slice(1);
-	return enumName === 'method' ? 'Label' : capitalizedEnumName;
+	return enumName === "method" ? "Label" : capitalizedEnumName;
 }
 
 function isPublicDeclaration(member: Member) {
-	const isPublic = member.modifiers.findIndex(x => x.value === 'public') > -1;
+	const isPublic = member.modifiers.findIndex(x => x.value === "public") > -1;
 	return member.memberClass === MemberClass.declaration && isPublic;
 }

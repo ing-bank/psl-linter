@@ -1,5 +1,5 @@
-import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from '@mischareitsma/psl-parser';
-import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
+import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from "@mischareitsma/psl-parser";
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 export class MultiLineDeclare extends MethodRule {
 
@@ -12,7 +12,7 @@ export class MultiLineDeclare extends MethodRule {
 
 		multiLineDeclarations.forEach((declarationsOnLine, lineNumber) => {
 			const fullLine = this.profileComponent.getTextAtLine(lineNumber);
-			if (!(fullLine.includes('=') && fullLine.includes(','))) return;
+			if (!(fullLine.includes("=") && fullLine.includes(","))) return;
 			for (const declaration of declarationsOnLine) {
 				reportVariable = false;
 				let conditionOpen: boolean = false;
@@ -23,7 +23,7 @@ export class MultiLineDeclare extends MethodRule {
 					if (token.isWhiteSpace()) continue;
 					if (token.isDoubleQuotes()) continue;
 					if (token.isBlockCommentInit()) continue;
-					if ((token.value) === 'type') {
+					if ((token.value) === "type") {
 						typePresent = true;
 						continue;
 					}
@@ -66,11 +66,11 @@ export class MultiLineDeclare extends MethodRule {
 					const diagnostic = new Diagnostic(
 						declaration.id.getRange(),
 						`Declaration ${declaration.id.value} should be ` +
-							'initialized on a new line.',
+							"initialized on a new line.",
 						this.ruleName,
 						DiagnosticSeverity.Warning,
 					);
-					diagnostic.source = 'lint';
+					diagnostic.source = "lint";
 					diagnostics.push(diagnostic);
 				}
 			}

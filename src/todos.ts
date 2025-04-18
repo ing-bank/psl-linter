@@ -1,12 +1,12 @@
-import { tokenizer } from '@mischareitsma/psl-parser';
-import { Diagnostic, DiagnosticSeverity, PslRule } from './api';
+import { tokenizer } from "@mischareitsma/psl-parser";
+import { Diagnostic, DiagnosticSeverity, PslRule } from "./api";
 
 export class TodoInfo extends PslRule {
 
 	report(): Diagnostic[] {
 		let todos: Todo[] = [];
 		for (const token of this.parsedDocument.comments) {
-			if (token.value.includes('TODO')) {
+			if (token.value.includes("TODO")) {
 				const startLine = token.position.line;
 				const startChar = token.position.character;
 				todos = todos.concat(
@@ -21,7 +21,7 @@ export class TodoInfo extends PslRule {
 				this.ruleName,
 				DiagnosticSeverity.Information
 			);
-			diagnostic.source = 'TODO';
+			diagnostic.source = "TODO";
 			return diagnostic;
 		});
 	}
@@ -46,7 +46,7 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 			todo.range.end.character + todo.message.trimEnd().length
 		);
 		todo.range = new tokenizer.Range(start, end);
-		todo.message = todo.message.trim().replace(/^:/gm, '').trim();
+		todo.message = todo.message.trim().replace(/^:/gm, "").trim();
 		if (!todo.message) todo.message = `TODO on line ${todo.range.start.line + 1}.`;
 		todos.push(todo);
 		todo = undefined;
@@ -64,14 +64,14 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 				getTodosFromComment(token.value, currentLine, currentChar)
 			);
 		}
-		else if (token.value === 'TODO' && !todo) {
+		else if (token.value === "TODO" && !todo) {
 			const range = new tokenizer.Range(
 				currentLine,
 				currentChar,
 				currentLine,
 				currentChar + 4
 			);
-			const message = '';
+			const message = "";
 			todo = { range, message };
 		}
 		else if (todo) {

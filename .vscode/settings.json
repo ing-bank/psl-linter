@@ -5,5 +5,10 @@
     "search.exclude": {
         "lib": true
     },
-    "editor.rulers": [120]
+    "editor.rulers": [100],
+    "[typescript]": {
+        "editor.tabSize": 8,
+        "editor.insertSpaces": false,
+        "files.insertFinalNewline": true
+    }
 }

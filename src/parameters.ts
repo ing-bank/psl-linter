@@ -1,5 +1,5 @@
-import { Method, Parameter } from '@mischareitsma/psl-parser';
-import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
+import { Method, Parameter } from "@mischareitsma/psl-parser";
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 /**
  * Checks if multiple parameters are written on the same line as the method declaration.
@@ -28,7 +28,7 @@ export class MethodParametersOnNewLine extends MethodRule {
 					this.ruleName,
 					DiagnosticSeverity.Warning
 				);
-				diagnostic.source = 'lint';
+				diagnostic.source = "lint";
 				diagnostics.push(diagnostic);
 			}
 			else if (
@@ -43,7 +43,7 @@ export class MethodParametersOnNewLine extends MethodRule {
 					this.ruleName,
 					DiagnosticSeverity.Warning
 				);
-				diagnostic.source = 'lint';
+				diagnostic.source = "lint";
 				diagnostics.push(diagnostic);
 			}
 			previousParam = param;

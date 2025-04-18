@@ -5,21 +5,19 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Jest file",
+			"name": "Run test file",
 			"type": "node",
 			"request": "launch",
-			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
 			"args": [
-				"${fileBasenameNoExtension}",
-				"--runInBand",
-				"--coverage=false",
-				"--no-cache"
+				"--test",
+				"--no-warnings",
+				"--import",
+				"tsx",
+				"${file}"
 			],
-			"cwd": "${workspaceRoot}",
+			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"sourceMaps": true,
-			"preLaunchTask": "npm: compile",
+			"sourceMaps": true
 		},
 		{
 			"type": "node",

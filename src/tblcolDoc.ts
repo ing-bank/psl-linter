@@ -1,6 +1,6 @@
-import * as path from 'path';
-import { tokenizer } from '@mischareitsma/psl-parser';
-import { Diagnostic, DiagnosticSeverity, FileDefinitionRule } from './api';
+import * as path from "path";
+import { tokenizer } from "@mischareitsma/psl-parser";
+import { Diagnostic, DiagnosticSeverity, FileDefinitionRule } from "./api";
 
 /**
  * Checks whether table and columns are created with documentation.
@@ -24,8 +24,8 @@ export class TblColDocumentation extends FileDefinitionRule {
 
 		if (!tblColDoc) {
 			const message = (
-				'Documentation missing for ' +
-				(baseName.endsWith('TBL') ? 'table definition' : 'data item') +
+				"Documentation missing for " +
+				(baseName.endsWith("TBL") ? "table definition" : "data item") +
 				` "${baseName}".`
 			);
 
@@ -41,6 +41,6 @@ export class TblColDocumentation extends FileDefinitionRule {
 
 function addDiagnostic(range: tokenizer.Range, message: string, ruleName: string): Diagnostic {
 	const diagnostic = new Diagnostic(range, message, ruleName, DiagnosticSeverity.Information);
-	diagnostic.source = 'lint';
+	diagnostic.source = "lint";
 	return diagnostic;
 }

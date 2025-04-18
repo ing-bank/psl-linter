@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [@ManikandanKKA](https://github.com/ManikandanKKA)).
 - PropertyIsDuplicate psl-lint rule (thanks
   [@Thirurakshan](https://github.com/Thirurakshan)).
+- Moved from jest to node test framework
 
 ### Changed
 
