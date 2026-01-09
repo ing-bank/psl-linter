@@ -1,15 +1,32 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es2017",
-        "lib": [
-            "es2017"
-        ],
-        "outDir": "lib",
-        "sourceMap": true,
-        "declaration": true,
-        "declarationDir": "lib/types",
-        "rootDir": "src/"
-    },
-    "include": ["src/**/*"]
+	"compilerOptions": {
+		"noUnusedLocals": true,
+		"noUnusedParameters": false,
+		"moduleResolution": "node",
+		"module": "ESNext",
+		"target": "ESNext",
+		"lib": [
+			"ESNext"
+		],
+		"inlineSourceMap": true,
+		"declaration": true,
+		"rootDir": "src",
+		"outDir": "dist",
+		"alwaysStrict": true,
+		"noImplicitThis": true,
+		"forceConsistentCasingInFileNames": true,
+		"newLine": "lf",
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+	},
+	"exclude": [
+		"node_modules",
+		"out",
+		"dist",
+		"lib",
+		"tmp",
+		"test",
+		"build-package-json.js",
+	],
 }

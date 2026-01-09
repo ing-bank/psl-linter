@@ -1,5 +1,5 @@
-import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from 'psl-parser';
-import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
+import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from "@profile-psl/psl-parser";
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 export class MultiLineDeclare extends MethodRule {
 
@@ -12,7 +12,7 @@ export class MultiLineDeclare extends MethodRule {
 
 		multiLineDeclarations.forEach((declarationsOnLine, lineNumber) => {
 			const fullLine = this.profileComponent.getTextAtLine(lineNumber);
-			if (!(fullLine.includes('=') && fullLine.includes(','))) return;
+			if (!(fullLine.includes("=") && fullLine.includes(","))) return;
 			for (const declaration of declarationsOnLine) {
 				reportVariable = false;
 				let conditionOpen: boolean = false;
@@ -23,14 +23,18 @@ export class MultiLineDeclare extends MethodRule {
 					if (token.isWhiteSpace()) continue;
 					if (token.isDoubleQuotes()) continue;
 					if (token.isBlockCommentInit()) continue;
-					if ((token.value) === 'type') {
+					if ((token.value) === "type") {
 						typePresent = true;
 						continue;
 					}
 					if (NON_TYPE_MODIFIERS.indexOf(token.value) > -1) {
 						continue;
 					}
-					if (declaration.types.map(t => t.value).indexOf(token.value) > -1) {
+					if (
+						declaration.types
+							.map(t => t.value)
+							.indexOf(token.value) > -1
+					) {
 						continue;
 					}
 					if (token.isOpenParen()) {
@@ -46,7 +50,12 @@ export class MultiLineDeclare extends MethodRule {
 						commaFound = true;
 						continue;
 					}
-					if (commaFound && token.isEqualSign() && typePresent && conditionOpen === conditionClose) {
+					if (
+						commaFound &&
+						token.isEqualSign() &&
+						typePresent &&
+						conditionOpen === conditionClose
+					) {
 						conditionOpen = false;
 						conditionClose = false;
 						commaFound = false;
@@ -56,11 +65,12 @@ export class MultiLineDeclare extends MethodRule {
 				if (reportVariable) {
 					const diagnostic = new Diagnostic(
 						declaration.id.getRange(),
-						`Declaration ${declaration.id.value} should be initialized on a new line.`,
+						`Declaration ${declaration.id.value} should be ` +
+							"initialized on a new line.",
 						this.ruleName,
 						DiagnosticSeverity.Warning,
 					);
-					diagnostic.source = 'lint';
+					diagnostic.source = "lint";
 					diagnostics.push(diagnostic);
 				}
 			}

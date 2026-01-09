@@ -1,10 +1,13 @@
-import * as api from '../src/api';
-import {
-	MemberCamelCase, MemberLength,
-	MemberLiteralCase, MemberStartsWithV, PropertyIsDummy } from '../src/elementsConventionChecker';
-import * as utils from './ruleUtils';
+import { before, describe, test } from "node:test";
+import * as assert from "node:assert/strict";
 
-describe('Members tests', () => {
+import * as api from "../src/api";
+import {
+	MemberCamelCase, MemberLength, MemberLiteralCase, MemberStartsWithV, PropertyIsDummy
+} from "../src/elementsConventionChecker";
+import * as utils from "./ruleUtils";
+
+describe("Members tests", () => {
 	let literalDiagnostics: api.Diagnostic[] = [];
 	let camelCaseDiagnostics: api.Diagnostic[] = [];
 	let lengthDiagnostics: api.Diagnostic[] = [];
@@ -12,46 +15,73 @@ describe('Members tests', () => {
 	let withoutDummyDiagnostics: api.Diagnostic[] = [];
 	let withDummyDiagnostics: api.Diagnostic[] = [];
 
-	beforeAll(async () => {
-		literalDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberLiteralCase.name);
-		camelCaseDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberCamelCase.name);
-		lengthDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberLength.name);
-		vDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', MemberStartsWithV.name);
-		withoutDummyDiagnostics = await utils.getDiagnostics('ZTestConvention.PROC', PropertyIsDummy.name);
-		withDummyDiagnostics = await utils.getDiagnostics('ZParent.PROC', PropertyIsDummy.name);
+	before(() => {
+		literalDiagnostics = utils.getDiagnostics(
+			"ZTestConvention.PROC",
+			MemberLiteralCase.name
+		);
+		camelCaseDiagnostics = utils.getDiagnostics(
+			"ZTestConvention.PROC",
+			MemberCamelCase.name
+		);
+		lengthDiagnostics = utils.getDiagnostics(
+			"ZTestConvention.PROC",
+			MemberLength.name
+		);
+		vDiagnostics = utils.getDiagnostics(
+			"ZTestConvention.PROC",
+			MemberStartsWithV.name
+		);
+		withoutDummyDiagnostics = utils.getDiagnostics(
+			"ZTestConvention.PROC",
+			PropertyIsDummy.name
+		);
+		withDummyDiagnostics = utils.getDiagnostics(
+			"ZParent.PROC",
+			PropertyIsDummy.name
+		);
 	});
 
-	test('Upper case literal report', () => {
-		expect(utils.diagnosticsOnLine(5, literalDiagnostics).length).toBe(1);
+	test("Upper case literal report", () => {
+		assert.strictEqual(utils.diagnosticsOnLine(5, literalDiagnostics).length, 1);
 	});
 
-	test('Camel case literal report', () => {
-		expect(utils.diagnosticsOnLine(4, camelCaseDiagnostics).length).toBe(1);
+	test("Camel case literal report", () => {
+		assert.strictEqual(utils.diagnosticsOnLine(4, camelCaseDiagnostics).length, 1);
 	});
 
-	test('More than 25 characters', () => {
-		expect(utils.diagnosticsOnLine(14, lengthDiagnostics).length).toBe(1);
+	test("More than 25 characters", () => {
+		assert.strictEqual(utils.diagnosticsOnLine(14, lengthDiagnostics).length, 1);
 	});
 
-	test('Starts with v', () => {
+	test("Starts with v", () => {
 		const diagnosticsOnLine = utils.diagnosticsOnLine(23, vDiagnostics);
-		expect(diagnosticsOnLine.length).toBe(1);
-		expect(diagnosticsOnLine[0].message).toBe(`Declaration "vString" starts with 'v'.`);
-		expect(diagnosticsOnLine[0].severity).toBe(api.DiagnosticSeverity.Warning);
+		assert.strictEqual(diagnosticsOnLine.length,1);
+		assert.strictEqual(
+			diagnosticsOnLine[0].message,
+			'Declaration "vString" starts with \'v\'.'
+		);
+		assert.strictEqual(diagnosticsOnLine[0].severity, api.DiagnosticSeverity.Warning);
 	});
-	test('Public starts with v', () => {
+	test("Public starts with v", () => {
 		const diagnosticsOnLine = utils.diagnosticsOnLine(24, vDiagnostics);
-		expect(diagnosticsOnLine.length).toBe(1);
-		expect(diagnosticsOnLine[0].message).toBe(`Declaration "vNumber" is public and starts with 'v'.`);
-		expect(diagnosticsOnLine[0].severity).toBe(api.DiagnosticSeverity.Information);
+		assert.strictEqual(diagnosticsOnLine.length, 1);
+		assert.strictEqual(
+			diagnosticsOnLine[0].message,
+			'Declaration "vNumber" is public and starts with \'v\'.'
+		);
+		assert.strictEqual(
+			diagnosticsOnLine[0].severity,
+			api.DiagnosticSeverity.Information
+		);
 	});
 
-	test('Property was not called \'dummy\'', () => {
-		expect(withoutDummyDiagnostics.length).toBe(0);
+	test("Property was not called 'dummy'", () => {
+		assert.strictEqual(withoutDummyDiagnostics.length, 0);
 	});
 
-	test('Property was called \'dummy\'', () => {
-		expect(utils.diagnosticsOnLine(2, withDummyDiagnostics).length).toBe(1);
+	test("Property was called 'dummy'", () => {
+		assert.strictEqual(utils.diagnosticsOnLine(2, withDummyDiagnostics).length, 1);
 	});
 
 });

@@ -1,14 +1,16 @@
 {
-  "name": "psl-lint",
-  "version": "1.6.0",
+  "name": "@profile-psl/psl-linter",
+  "version": "2.0.0",
   "description": "Profile Scripting Language Linter",
+  "type": "module",
+  "main": "dist/cli.js",
+  "bin": "dist/cli.js",
+  "types": "dist/cli.d.ts",
   "keywords": [
     "PSL",
     "linter",
     "lint",
-    "profile",
-    "scripting",
-    "language"
+    "Profile"
   ],
   "homepage": "https://github.com/ing-bank/psl-linter#readme",
   "bugs": {
@@ -17,37 +19,44 @@
   "license": "MIT",
   "author": "atiplea",
   "contributors": [
-    "SOliveira"
+    "SOliveira",
+    {
+      "name": "Mischa Reitsma",
+      "email": "dev@mreitsma.com",
+      "url": "https://github.com/mischareitsma"
+    }
   ],
-  "main": "./lib/cli.js",
-  "types": "./lib/types/cli.d.ts",
-  "bin": "./lib/cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ing-bank/psl-linter.git"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "buildts": "tsc",
-    "build": "npm run clean && npm run buildts",
-    "lint": "tslint -c tslint.json --project .",
-    "watch": "npm run build -- -watch",
-    "test": "jest"
+    "clean": "rimraf dist *.tsbuildinfo",
+    "compile": "tsc -p tsconfig.json",
+    "prebuild": "npm run clean && npm run lint && npm run test",
+    "build": "npm run compile && npm run generate-package-json && npm run copy-extra-files-dist",
+    "lint": "npx eslint .",
+    "test": "node --test --no-warnings --import tsx test/*.test.ts",
+    "generate-package-json": "node ./build-package-json.js",
+    "copy-extra-files-dist": "cp README.md CHANGELOG.md LICENSE dist/",
+    "release": "npm run build && npm publish --access public dist/"
   },
   "dependencies": {
-    "commander": "^9.4.1",
-    "fs-extra": "^10.1.0",
-    "minimatch": "^5.1.0",
-    "psl-parser": "^0.0.3"
+    "@profile-psl/psl-parser": "0.1.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "minimatch": "^9.0.3"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.4",
-    "jest": "^29.2.1",
-    "typescript": "^4.8.4",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^29.0.3",
-    "tslint": "^5.20.1"
+    "@eslint/js": "^9.24.0",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^29.5.11",
+    "@types/minimatch": "^5.1.2",
+    "@types/node": "^20.11.0",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.19.3",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.30.1"
   }
 }

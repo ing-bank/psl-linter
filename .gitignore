@@ -6,4 +6,9 @@ node_modules/
 
 # Project build
 lib/
+dist/
+out/
 *.tgz
+
+# MacOS stuff
+.DS_Store

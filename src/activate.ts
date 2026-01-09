@@ -1,24 +1,24 @@
-import * as path from 'path';
+import * as path from "path";
 import {
 	DeclarationRule, Diagnostic, FileDefinitionRule, MemberRule, MethodRule, ParameterRule,
 	ProfileComponent, ProfileComponentRule, PropertyRule, PslRule,
-} from './api';
-import { getConfig, matchConfig } from './config';
+} from "./api";
+import { getConfig, matchConfig } from "./config";
+import { Member, ParsedDocument } from "@profile-psl/psl-parser";
 
 /**
  * Import rules here.
  */
-import { ParsedDocument } from 'psl-parser';
 import {
 	MemberCamelCase, MemberLength, MemberLiteralCase,
 	MemberStartsWithV, PropertyIsDummy, PropertyIsDuplicate,
-} from './elementsConventionChecker';
-import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from './methodDoc';
-import { MultiLineDeclare } from './multiLineDeclare';
-import { MethodParametersOnNewLine } from './parameters';
-import { RuntimeStart } from './runtime';
-import { TblColDocumentation } from './tblcolDoc';
-import { TodoInfo } from './todos';
+} from "./elementsConventionChecker";
+import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from "./methodDoc";
+import { MultiLineDeclare } from "./multiLineDeclare";
+import { MethodParametersOnNewLine } from "./parameters";
+import { RuntimeStart } from "./runtime";
+import { TblColDocumentation } from "./tblcolDoc";
+import { TodoInfo } from "./todos";
 
 /**
  * Add new rules here to have them checked at the appropriate time.
@@ -75,7 +75,11 @@ class RuleSubscription {
 	private readonly declarationRules: DeclarationRule[];
 	private readonly parameterRules: ParameterRule[];
 
-	constructor(private profileComponent: ProfileComponent, private parsedDocument?: ParsedDocument, useConfig?: boolean) {
+	constructor(
+		private profileComponent: ProfileComponent,
+		private parsedDocument?: ParsedDocument,
+		useConfig?: boolean
+	) {
 		this.diagnostics = [];
 
 		const config = useConfig ? getConfig(this.profileComponent.fsPath) : undefined;
@@ -83,7 +87,11 @@ class RuleSubscription {
 		const initializeRules = (rules: ProfileComponentRule[]) => {
 			return rules.filter(rule => {
 				if (!config) return true;
-				return matchConfig(path.basename(this.profileComponent.fsPath), rule.ruleName, config);
+				return matchConfig(
+					path.basename(this.profileComponent.fsPath),
+					rule.ruleName,
+					config
+				);
 			}).map(rule => {
 				rule.profileComponent = this.profileComponent;
 				return rule;
@@ -91,7 +99,7 @@ class RuleSubscription {
 		};
 		const initializePslRules = (rules: PslRule[]) => {
 			const componentInitialized = initializeRules(rules) as PslRule[];
-			const pslParsedDocument = this.parsedDocument as ParsedDocument;
+			const pslParsedDocument = this.parsedDocument;
 			return componentInitialized.map(rule => {
 				rule.parsedDocument = pslParsedDocument;
 				return rule;
@@ -109,7 +117,7 @@ class RuleSubscription {
 	}
 
 	reportRules(): Diagnostic[] {
-		const addDiagnostics = (rules: ProfileComponentRule[], ...args: any[]) => {
+		const addDiagnostics = (rules: ProfileComponentRule[], ...args: Member[]) => {
 			rules.forEach(rule => this.diagnostics.push(...rule.report(...args)));
 		};
 
@@ -122,7 +130,7 @@ class RuleSubscription {
 		if (ProfileComponent.isPsl(this.profileComponent.fsPath)) {
 			addDiagnostics(this.pslRules);
 
-			const parsedDocument = this.parsedDocument as ParsedDocument;
+			const parsedDocument = this.parsedDocument;
 
 			for (const property of parsedDocument.properties) {
 				addDiagnostics(this.memberRules, property);

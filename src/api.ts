@@ -1,6 +1,8 @@
-import * as path from 'path';
-import { Declaration, Member, Method, Parameter, ParsedDocument, Property } from 'psl-parser';
-import { tokenizer } from 'psl-parser';
+import * as path from "node:path";
+import {
+	Declaration, Member, Method, Parameter, ParsedDocument, Property
+} from "@profile-psl/psl-parser";
+import { tokenizer } from "@profile-psl/psl-parser";
 
 export enum DiagnosticSeverity {
 
@@ -74,10 +76,10 @@ export class Diagnostic {
 	 * @param severity The severity, default is [error](#DiagnosticSeverity.Error).
 	 */
 	constructor(range: tokenizer.Range,
-				message: string,
-				ruleName: string,
-				severity?: DiagnosticSeverity,
-				member?: Member) {
+		message: string,
+		ruleName: string,
+		severity?: DiagnosticSeverity,
+		member?: Member) {
 		this.range = range;
 		this.message = message;
 		this.ruleName = ruleName;
@@ -121,7 +123,7 @@ export abstract class ProfileComponentRule {
 
 	profileComponent: ProfileComponent;
 
-	abstract report(...args: any[]): Diagnostic[];
+	abstract report(...args: Member[]): Diagnostic[];
 }
 
 export abstract class FileDefinitionRule extends ProfileComponentRule { }
@@ -130,27 +132,27 @@ export abstract class PslRule extends ProfileComponentRule {
 
 	parsedDocument: ParsedDocument;
 
-	abstract report(...args: any[]): Diagnostic[];
+	abstract override report(...args: Member[]): Diagnostic[];
 }
 
 export abstract class MemberRule extends PslRule {
-	abstract report(member: Member): Diagnostic[];
+	abstract override report(member: Member): Diagnostic[];
 }
 
 export abstract class PropertyRule extends PslRule {
-	abstract report(property: Property): Diagnostic[];
+	abstract override report(property: Property): Diagnostic[];
 }
 
 export abstract class MethodRule extends PslRule {
-	abstract report(method: Method): Diagnostic[];
+	abstract override report(method: Method): Diagnostic[];
 }
 
 export abstract class ParameterRule extends PslRule {
-	abstract report(parameter: Parameter, method: Method): Diagnostic[];
+	abstract override report(parameter: Parameter, method: Method): Diagnostic[];
 }
 
 export abstract class DeclarationRule extends PslRule {
-	abstract report(declaration: Declaration, method?: Method): Diagnostic[];
+	abstract override report(declaration: Declaration, method?: Method): Diagnostic[];
 }
 
 type GetTextMethod = (lineNumber: number) => string;
@@ -162,15 +164,15 @@ type GetTextMethod = (lineNumber: number) => string;
 export class ProfileComponent {
 
 	static isPsl(fsPath: string): boolean {
-		return path.extname(fsPath) === '.PROC'
-			|| path.extname(fsPath) === '.BATCH'
-			|| path.extname(fsPath) === '.TRIG'
-			|| path.extname(fsPath).toUpperCase() === '.PSL';
+		return path.extname(fsPath) === ".PROC"
+			|| path.extname(fsPath) === ".BATCH"
+			|| path.extname(fsPath) === ".TRIG"
+			|| path.extname(fsPath).toUpperCase() === ".PSL";
 	}
 
 	static isFileDefinition(fsPath: string): boolean {
-		return path.extname(fsPath) === '.TBL'
-			|| path.extname(fsPath) === '.COL';
+		return path.extname(fsPath) === ".TBL"
+			|| path.extname(fsPath) === ".COL";
 	}
 
 	static isProfileComponent(fsPath: string): boolean {
@@ -195,12 +197,12 @@ export class ProfileComponent {
 	 */
 	getTextAtLine(lineNumber: number): string {
 		if (lineNumber < 0) {
-			throw new Error('Cannot get text at negative line number.');
+			throw new Error("Cannot get text at negative line number.");
 		}
 		if (!this.indexedDocument) {
 			this.indexedDocument = this.createIndexedDocument();
 		}
-		return this.indexedDocument.get(lineNumber) || '';
+		return this.indexedDocument.get(lineNumber) || "";
 	}
 
 	/**
@@ -218,15 +220,15 @@ export class ProfileComponent {
 	}
 
 	private createIndexedDocument(): Map<number, string> {
-		const indexedDocument = new Map();
-		let line: string = '';
+		const indexedDocument = new Map<number, string>();
+		let line: string = "";
 		let index: number = 0;
 		for (const char of this.textDocument) {
 			line += char;
-			if (char === '\n') {
+			if (char === "\n") {
 				indexedDocument.set(index, line);
 				index++;
-				line = '';
+				line = "";
 			}
 		}
 		return indexedDocument;

@@ -1,96 +1,103 @@
-import * as api from '../src/api';
-import { PropertyIsDuplicate } from '../src/elementsConventionChecker';
-import * as utils from './ruleUtils';
+import { before, describe, test } from "node:test";
+import * as assert from "node:assert/strict";
 
-describe('Parameter tests', () => {
+import * as api from "../src/api";
+import { PropertyIsDuplicate } from "../src/elementsConventionChecker";
+import * as utils from "./ruleUtils";
+
+describe("Duplicate property test", () => {
 
 	let propertyisDuplicate: api.Diagnostic[] = [];
 
-	beforeAll(async () => {
-		propertyisDuplicate = await utils.getDiagnostics('ZDuplicateProperty.PROC', PropertyIsDuplicate.name);
+	before(() => {
+		propertyisDuplicate = utils.getDiagnostics(
+			"ZDuplicateProperty.PROC",
+			PropertyIsDuplicate.name
+		);
 	});
 
-	test('line 1', () => {
+	test("line 1", () => {
 		const diagnostics = utils.diagnosticsOnLine(1, propertyisDuplicate);
-		expect(diagnostics.length).toBe(0);
+		assert.strictEqual(diagnostics.length, 0);
 	});
 
-	test('line 2', () => {
+	test("line 2", () => {
 		const diagnostics = utils.diagnosticsOnLine(2, propertyisDuplicate);
-		expect(diagnostics.length).toBe(0);
+		assert.strictEqual(diagnostics.length, 0);
 	});
 
-	test('line 3', () => {
+	test("line 3", () => {
 		const test1Message = 'Property "aCCount" is already declared with different case.';
 		const diagnostics = utils.diagnosticsOnLine(3, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 4', () => {
+	test("line 4", () => {
 		const test1Message = 'Property "accounT" is already declared with different case.';
 		const diagnostics = utils.diagnosticsOnLine(4, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 5', () => {
+	test("line 5", () => {
 		const diagnostics = utils.diagnosticsOnLine(5, propertyisDuplicate);
-		expect(diagnostics.length).toBe(0);
+		assert.strictEqual(diagnostics.length, 0);
 	});
 
-	test('line 6', () => {
+	test("line 6", () => {
 		const test1Message = 'Property "customer" is already declared.';
 		const diagnostics = utils.diagnosticsOnLine(6, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 7', () => {
+	test("line 7", () => {
 		const test1Message = 'Property "array" is already declared.';
 		const diagnostics = utils.diagnosticsOnLine(7, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 8', () => {
+	test("line 8", () => {
 		const test1Message = 'Property "aRRay" is already declared with different case.';
 		const diagnostics = utils.diagnosticsOnLine(8, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 9', () => {
+	test("line 9", () => {
 		const test1Message = 'Property "array" is already declared.';
 		const diagnostics = utils.diagnosticsOnLine(9, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 10', () => {
+	test("line 10", () => {
 		const test1Message = 'Property "array" is already declared.';
 		const diagnostics = utils.diagnosticsOnLine(10, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 11', () => {
+	test("line 11", () => {
 		const diagnostics = utils.diagnosticsOnLine(11, propertyisDuplicate);
-		expect(diagnostics.length).toBe(0);
+		assert.strictEqual(diagnostics.length, 0);
 	});
 
-	test('line 12', () => {
+	test("line 12", () => {
 		const test1Message = 'Property "customer" is already declared.';
 		const diagnostics = utils.diagnosticsOnLine(12, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
-	test('line 13', () => {
-		const test1Message = 'Property "inliteral" is already declared with different case.';
+	test("line 13", () => {
+		const test1Message =
+			'Property "inliteral" is already declared with different case.';
 		const diagnostics = utils.diagnosticsOnLine(13, propertyisDuplicate);
-		expect(diagnostics.length).toBe(1);
-		expect(diagnostics[0].message).toBe(test1Message);
+		assert.strictEqual(diagnostics.length, 1);
+		assert.strictEqual(diagnostics[0].message, test1Message);
 	});
 
 });

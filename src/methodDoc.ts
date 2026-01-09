@@ -1,5 +1,5 @@
-import { Method, ParsedDocument, tokenizer, utilities } from 'psl-parser';
-import { Diagnostic, DiagnosticSeverity, MethodRule } from './api';
+import { Method, ParsedDocument, tokenizer, utilities } from "@profile-psl/psl-parser";
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 export enum Code {
 	ONE_EMPTY_LINE = 1,
@@ -57,13 +57,23 @@ export class TwoEmptyLines extends MethodRule {
 			method.id.position.line - 2 : method.id.position.line - 1;
 
 		if (lineAbove < 2) {
-			const message = `There should be two empty lines above label "${idToken.value}".`;
-			return [addDiagnostic(idToken, method, message, this.ruleName, Code.TWO_EMPTY_LINES)];
+			const message =
+				`There should be two empty lines above label "${idToken.value}".`;
+			return [addDiagnostic(
+				idToken,
+				method,
+				message,
+				this.ruleName,
+				Code.TWO_EMPTY_LINES
+			)];
 		}
 
-		const hasOneSpaceAbove: boolean = this.profileComponent.getTextAtLine(lineAbove).trim() === '';
-		const hasTwoSpacesAbove: boolean = this.profileComponent.getTextAtLine(lineAbove - 1).trim() === '';
-		const hasThreeSpacesAbove: boolean = this.profileComponent.getTextAtLine(lineAbove - 2).trim() === '';
+		const hasOneSpaceAbove: boolean =
+			this.profileComponent.getTextAtLine(lineAbove).trim() === "";
+		const hasTwoSpacesAbove: boolean =
+			this.profileComponent.getTextAtLine(lineAbove - 1).trim() === "";
+		const hasThreeSpacesAbove: boolean =
+			this.profileComponent.getTextAtLine(lineAbove - 2).trim() === "";
 
 		let code: Code | undefined;
 		if (!hasTwoSpacesAbove) code = Code.ONE_EMPTY_LINE;
@@ -71,35 +81,53 @@ export class TwoEmptyLines extends MethodRule {
 
 		// Checks two empty lines above a method
 		if (!hasOneSpaceAbove || !hasTwoSpacesAbove || lineAbove <= 0) {
-			const message = `There should be two empty lines above label "${idToken.value}".`;
-			diagnostics.push(addDiagnostic(idToken, method, message, this.ruleName, code));
+			const message =
+				`There should be two empty lines above label "${idToken.value}".`;
+			diagnostics.push(
+				addDiagnostic(idToken, method, message, this.ruleName, code)
+			);
 		}
 
 		// Check more than 2 empty lines above a method
 		if (hasOneSpaceAbove && hasTwoSpacesAbove && hasThreeSpacesAbove) {
-			const message = `There are more than two empty lines above label "${idToken.value}".`;
-			diagnostics.push(addDiagnostic(idToken, method, message, this.ruleName, code));
+			const message = "There are more than two empty lines above label " +
+				`"${idToken.value}".`;
+			diagnostics.push(
+				addDiagnostic(idToken, method, message, this.ruleName, code)
+			);
 		}
 
 		return diagnostics;
 	}
 }
 
-function addDiagnostic(idToken: tokenizer.Token, method: Method, message: string, ruleName: string, code?: Code): Diagnostic {
+function addDiagnostic(
+	idToken: tokenizer.Token,
+	method: Method,
+	message: string,
+	ruleName: string,
+	code?: Code
+): Diagnostic {
 	const range = idToken.getRange();
 	const diagnostic = new Diagnostic(range, message, ruleName, DiagnosticSeverity.Information);
-	diagnostic.source = 'lint';
+	diagnostic.source = "lint";
 	diagnostic.member = method;
 	if (code) diagnostic.code = code;
 	return diagnostic;
 }
 
 function hasSeparator(method: Method, parsedDocument: ParsedDocument): boolean {
-	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(parsedDocument, method.id.position.line - 1);
+	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(
+		parsedDocument,
+		method.id.position.line - 1
+	);
 	return nextLineCommentTokens[0] && nextLineCommentTokens[0].isLineComment();
 }
 
 function hasBlockComment(method: Method, parsedDocument: ParsedDocument): boolean {
-	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(parsedDocument, utilities.getLineAfter(method));
+	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(
+		parsedDocument,
+		utilities.getLineAfter(method)
+	);
 	return nextLineCommentTokens[0] && nextLineCommentTokens[0].isBlockComment();
 }
