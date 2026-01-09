@@ -4,7 +4,7 @@ import {
 	ProfileComponent, ProfileComponentRule, PropertyRule, PslRule,
 } from "./api";
 import { getConfig, matchConfig } from "./config";
-import { Member, ParsedDocument } from "@mischareitsma/psl-parser";
+import { Member, ParsedDocument } from "@profile-psl/psl-parser";
 
 /**
  * Import rules here.

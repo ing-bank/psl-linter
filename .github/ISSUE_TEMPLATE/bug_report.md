@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a bug report to help us improve
 title: ''
 labels: bug
 assignees: mreitsmaing, SOliveiraING
@@ -23,10 +23,10 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
+**Versions**
+ - OS: [e.g. Windows, MacOS]
  - psl-linter version: [e.g. 1.72.2]
- - node version[e.g. 1.12.1]
+ - node version: [e.g. 1.12.1]
 
 **Additional context**
 Add any other context about the problem here.

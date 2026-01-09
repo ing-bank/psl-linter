@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-01-09
+
 ### Added
 
 - TblColDocumentation psl-lint rule (thanks
   [@ManikandanKKA](https://github.com/ManikandanKKA)).
 - PropertyIsDuplicate psl-lint rule (thanks
   [@Thirurakshan](https://github.com/Thirurakshan)).
-- Moved from jest to node test framework
 
 ### Changed
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   original CHANGELOG are filtered for psl-linter related changes and kept in
   here, and the diffs are investigated to fill in the gaps.
 - Update this changelog to follow the latest format from *Keep a Changelog*.
+- Moved from jest to node test framework.
 
 ## [1.6.0] - 2019-05-06
 
@@ -94,8 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - MethodParametersOnNewLine psl-lint rule
   - PropertyLiteralCase psl-lint rule
 
-[Unreleased]: https://github.com/ing-bank/psl-linter/compare/3559ee427a52837baefcdb9b83cd3b97f8eb3324...HEAD
-
+[Unreleased]: https://github.com/ing-bank/psl-linter/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ing-bank/psl-linter/compare/3559ee427a52837baefcdb9b83cd3b97f8eb3324...v2.0.0
 <!--
 Links of the release below are before the project was split of the main
 ing-bank/vscode-psl project. The link to release 1.2.0 goes to the tag of that

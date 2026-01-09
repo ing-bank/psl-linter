@@ -1,7 +1,7 @@
 import {
 	Member, MemberClass, Method, tokenizer, utilities, BinaryOperator, Identifier,
 	StringLiteral, SyntaxKind, Value
-} from "@mischareitsma/psl-parser";
+} from "@profile-psl/psl-parser";
 
 import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from "./api";
 

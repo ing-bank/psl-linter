@@ -1,4 +1,4 @@
-import { tokenizer } from "@mischareitsma/psl-parser";
+import { tokenizer } from "@profile-psl/psl-parser";
 import { Diagnostic, DiagnosticSeverity, PslRule } from "./api";
 
 export class TodoInfo extends PslRule {

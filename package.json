@@ -1,6 +1,6 @@
 {
-  "name": "@mischareitsma/psl-linter",
-  "version": "0.1.0-alpha0",
+  "name": "@profile-psl/psl-linter",
+  "version": "2.0.0",
   "description": "Profile Scripting Language Linter",
   "type": "module",
   "main": "dist/cli.js",
@@ -10,9 +10,7 @@
     "PSL",
     "linter",
     "lint",
-    "profile",
-    "scripting",
-    "language"
+    "Profile"
   ],
   "homepage": "https://github.com/ing-bank/psl-linter#readme",
   "bugs": {
@@ -24,7 +22,7 @@
     "SOliveira",
     {
       "name": "Mischa Reitsma",
-      "email": "Mischa.Reitsma@ing.com",
+      "email": "dev@mreitsma.com",
       "url": "https://github.com/mischareitsma"
     }
   ],
@@ -44,7 +42,7 @@
     "release": "npm run build && npm publish --access public dist/"
   },
   "dependencies": {
-    "@mischareitsma/psl-parser": "0.1.0-alpha1",
+    "@profile-psl/psl-parser": "0.1.0",
     "commander": "^11.1.0",
     "fs-extra": "^11.2.0",
     "minimatch": "^9.0.3"

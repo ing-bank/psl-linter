@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { parseText } from "@mischareitsma/psl-parser";
+import { parseText } from "@profile-psl/psl-parser";
 import * as activate from "../src/activate";
 import * as api from "../src/api";
 

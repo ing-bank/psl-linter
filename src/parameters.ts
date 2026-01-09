@@ -1,4 +1,4 @@
-import { Method, Parameter } from "@mischareitsma/psl-parser";
+import { Method, Parameter } from "@profile-psl/psl-parser";
 import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
 
 /**

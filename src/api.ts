@@ -1,8 +1,8 @@
 import * as path from "node:path";
 import {
 	Declaration, Member, Method, Parameter, ParsedDocument, Property
-} from "@mischareitsma/psl-parser";
-import { tokenizer } from "@mischareitsma/psl-parser";
+} from "@profile-psl/psl-parser";
+import { tokenizer } from "@profile-psl/psl-parser";
 
 export enum DiagnosticSeverity {
 
